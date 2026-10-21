@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" role="img" aria-labelledby="title desc">
+  <title id="title">How VibeView makes an AI answer easier to understand</title>
+  <desc id="desc">Start with the current conversation, reveal the idea that matters, then read a complete visual explanation.</desc>
+  <defs>
+    <linearGradient id="flow" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#7651B5"/>
+      <stop offset="1" stop-color="#278878"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-25%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#37204f" flood-opacity=".09"/>
+    </filter>
+  </defs>
+  <rect x="1" y="1" width="1198" height="258" rx="22" fill="#fbf9fe" stroke="#e7def1"/>
+  <path d="M270 128H927" fill="none" stroke="url(#flow)" stroke-width="3" stroke-linecap="round"/>
+  <path d="m916 119 13 9-13 9" fill="none" stroke="#278878" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <g filter="url(#shadow)">
+    <rect x="44" y="42" width="290" height="176" rx="17" fill="#fff" stroke="#e7def1"/>
+    <rect x="455" y="42" width="290" height="176" rx="17" fill="#fff" stroke="#e7def1"/>
+    <rect x="866" y="42" width="290" height="176" rx="17" fill="#fff" stroke="#e7def1"/>
+  </g>
+  <g fill="none" stroke="#7651B5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M75 75h34a10 10 0 0 1 10 10v15a10 10 0 0 1-10 10H94l-11 9v-9h-8a10 10 0 0 1-10-10V85a10 10 0 0 1 10-10Z"/>
+    <path d="M87 87h22M87 97h14"/>
+  </g>
+  <g fill="none" stroke="#7651B5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M482 91a15 15 0 1 1 30 0c0 6-5 9-7 14h-16c-2-5-7-8-7-14Z" fill="#f1e9fa"/>
+    <path d="M490 109h14m-12 6h10M497 64v-7m27 34h7m-68 0h7m46-19 5-5m-48 5-5-5"/>
+  </g>
+  <g fill="none" stroke="#278878" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M906 65h31l14 14v38h-45z" fill="#e8f5f1"/>
+    <path d="M937 66v14h13m-34 13h22m-22 9h27m-27 9h19"/>
+    <path d="m964 108 7 7 14-17"/>
+  </g>
+  <text x="64" y="151" fill="#7651B5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5">START WITH CONTEXT</text>
+  <text x="64" y="181" fill="#2a2035" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700">The conversation you have</text>
+  <text x="475" y="151" fill="#7651B5" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5">FIND THE THREAD</text>
+  <text x="475" y="181" fill="#2a2035" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700">The idea worth seeing</text>
+  <text x="886" y="151" fill="#278878" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.5">MAKE IT CLICK</text>
+  <text x="886" y="181" fill="#2a2035" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700">A visual explanation to read</text>
+</svg>

@@ -1,168 +1,135 @@
 <div align="center">
 
+<img src="assets/vibeview-mark.svg" alt="VibeView visual explainer mark" width="72" height="72" />
+
 # VibeView
 
-### Turn long AI answers into visual explanations people want to read.
+### Make AI answers a pleasure to understand.
 
-An open-source Agent Skill that transforms the context and results already in your conversation into a polished, standalone HTML page.
+VibeView turns dense AI answers into visual explanations people can follow, remember, and share. An open Agent Skill for making plain text feel clear, human, and alive.
 
-**One Skill · `vv` in your conversation · One portable HTML file**
+[**See what it makes ↓**](#see-vibeview-in-action) · [Try it in your Agent](#get-started) · [Explore similar skills](#how-vibeview-fits) · [简体中文](README.zh-CN.md)
 
-[See the real output](#see-it-in-action) · [Install the skill](#install) · [Build the example](#build-the-example-without-an-agent) · [Understand the limits](#scope-and-limitations) · [Chinese](README.zh-CN.md)
+[![Agent Skills compatible](https://img.shields.io/badge/Agent%20Skills-compatible-7651B5?style=flat-square)](https://agentskills.io/home) [![Python 3](https://img.shields.io/badge/Python-3-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![MIT License](https://img.shields.io/badge/License-MIT-326F62?style=flat-square)](LICENSE)
 
 </div>
 
-![VibeView 1.5.2 output: a request sequence diagram explains timeouts, retries, and idempotency keys](docs/preview.png)
+<a id="see-vibeview-in-action"></a>
 
-> This is a screenshot of output built with this repository's 1.5.2 composer, not a mockup. The engineering scenario is fictional. An Agent authored the visual content; Python assembled the page. Results vary by model, source material, and prompt.
+![VibeView turns a long explanation into an editorial visual page with a retry sequence diagram, clear hierarchy, and visible technical limits](docs/preview.png)
 
-## From “answered” to “understood”
+<div align="center">
 
-AI can produce a long answer. The hard part is often not missing text; it is the relationships buried inside it. Which option fits which situation? What does one failure affect? Which assumptions support the conclusion?
+**One hard-to-follow answer, reshaped into a visual story.** The example shows why a timeout does not mean “nothing happened”—and how a clear diagram can make that distinction click.
 
-VibeView gives an Agent visual storytelling guidance and a lightweight HTML builder. **Start with the relationship the reader most needs to understand, then design the visual around the content.** It does not put every paragraph in a generic card or hide important details behind tabs.
+[Open the full example](docs/index.html) · [Read the source prompt](examples/reading-map.input.md)
 
-```text
-vv summarize the analysis so far and make the key conclusion and evidence clear
+</div>
 
-vv show how these two options differ, when each fits, and what each costs
+## From AI wall of text to an explanation that clicks
 
-vv explain the retry mechanism we discussed, including failure paths and limits
-```
+A useful AI answer can still feel like work. The main idea hides in a wall of text; cause and effect blur together; key trade-offs appear three screens too late. VibeView gives the answer a visual shape, so readers can see how the pieces fit before they get lost in the details.
 
-Type `vv` in a conversation with an Agent that supports local Skills. **It is a natural-language convention, not a terminal command.**
+**VibeView helps an Agent turn that explanation into something people can see, follow, and enjoy reading.** It starts with the conversation you already have, then composes around the meaning: a mechanism, a comparison, a visual analogy, a reading path—or whatever makes this particular subject click. The page brings the picture and the full explanation together, so visual clarity does not come at the cost of important detail.
 
-## See it in action
+### From conversation to clarity
 
-The example answers one question: **After a client timeout, why shouldn’t you retry with a new key?**
+![VibeView's reading flow: start with the current conversation, find the idea worth seeing, and make it click in a complete visual explanation](assets/reading-flow.svg)
 
-| What was buried in prose | How VibeView makes it visible |
-| --- | --- |
-| A request succeeded, but its receipt never arrived | A sequence diagram separates server state from what the client knows |
-| A retry of the same operation versus a genuinely new operation | Side-by-side relationship diagrams show when requests converge and when they stay separate |
-| A key reused with different parameters, an in-progress request, and an expired record | The complete rules table keeps the edge cases visible |
-| Idempotency is not an unconditional promise to execute only once | Concurrency, atomicity, and retention are explained as separate requirements |
+Start with the context you already have. Make the relationship that matters visible. Keep the full explanation close enough to follow.
 
-**[Read the source material](examples/reading-map.input.md) → [Explore the visual page](examples/reading-map.fragment.html) → [Download the standalone HTML](docs/index.html)**
-
-GitHub renders the HTML file as source. Download it and open it in a browser, or build it locally with the command below. There is no hosted live demo advertised here.
-
-## Why an Agent Skill?
-
-You are already discussing the problem with an Agent, and the answer is already in the conversation. VibeView helps make that answer easier to understand without moving it to another editor and laying it out again.
-
-- **Continue the current conversation.** Use the existing instructions, context, and results; do not repeat research or write a second report by default.
-- **Make relationships visible.** The Agent creates subject-specific diagrams, comparisons, and reading hierarchy. The design primitives do not impose a page layout.
-- **Emphasize the key idea while keeping details in view.** Explanations, tables, and relevant sources can appear together on one page.
-- **Deliver one portable file.** The composer embeds styles. The default output needs no JavaScript, remote fonts, or server.
-- **Spend effort on the content.** Reuse the brand shell, typography, and visual primitives so design effort goes into the explanation itself.
-
-**Good for:** explaining technical mechanisms, comparing options, reviewing a process, and presenting analysis already completed.
-
-**Not intended for:** live business systems, interactive dashboards, rigid pixel-perfect templates, or research that requires automatic fact-checking. Short answers do not need a webpage.
-
-## Install
-
-### Requirements
-
-- A harness that implements the standard Agent Skills format and can run local Python scripts.
-- Python 3. This release was validated with Python 3.13.12 on macOS. The scripts use only the standard library; no `pip install` is needed.
-- Git, or download the ZIP and copy the complete project folder into your harness's Skills directory.
-
-### Install
-
-Clone the repository into the Skills directory used by your harness. For example:
-
-```bash
-git clone https://github.com/tahoeliu/vibeview.git vibeview
-```
-
-Keep the complete folder structure (`SKILL.md`, `scripts/`, `assets/`, and `references/`). Reload or restart your harness if needed, then start a conversation and try:
+**Try saying:**
 
 ```text
-vv explain how a timeout retry can create a duplicate operation, including concurrency and expiration limits
+vv explain the analysis so I can see the main idea, evidence, and trade-offs
 ```
 
-VibeView follows the standard Agent Skills format. Any harness that implements that format and supports local script execution can use it. The exact installation path and reload steps depend on the harness.
+`vv` is a natural-language shortcut for a Skill-compatible Agent—not a shell command. VibeView is designed for complex answers; a short answer should stay short.
 
-If VibeView is already installed, choose a new destination or update the existing copy using your harness's usual process; do not clone over an existing directory.
+## How VibeView fits
 
-```text
-vv explain how a timeout retry can create a duplicate operation, including concurrency and expiration limits
-```
+VibeView is part of a fast-moving field of Agent Skills that turn information into visual output. The strongest projects overlap in real ways; each is tuned for a different job. This guide compares their stated workflows, not benchmark scores.
 
-The Agent authors HTML/SVG from the available material and invokes the local builder. The host and task determine where the result is saved and how it is previewed.
+| Project | Best when you want to… | VibeView’s angle |
+| --- | --- | --- |
+| **[visual-explainer](https://github.com/nicobailon/visual-explainer)** | Create rich pages or slide decks for engineering work such as diagrams, diff reviews, plan audits, data tables, and project recaps. | A strong choice for engineering-specific workflows and interactive explainers. VibeView focuses on the reading experience of an answer already developed in the conversation, for technical or everyday topics. |
+| **[visualise](https://github.com/bentossell/visualise)** | Render inline interactive visuals—SVG diagrams, HTML widgets, charts, and explainers—inside an Agent conversation. | A strong choice when the host renders interactive visuals inline. VibeView composes a complete visual reading experience around the answer. |
+| **[visualize](https://github.com/careerhackeralex/visualize)** | Turn a prompt into a standalone HTML visualization such as a slide deck, dashboard, infographic, or flowchart. | A strong choice for broad, artifact-first HTML creation. VibeView starts with an explanation and asks how to make it easier to understand. |
+| **[visualize by display.dev](https://github.com/display-dev/visualize)** | Create on-brand artifacts with a persistent brand profile and commands for exploring, reviewing, and polishing. | A strong choice when brand consistency and an artifact-review workflow lead the task. VibeView leads with the content’s visual explanation and reading rhythm. |
 
-Other hosts that support local Skills may be able to load this folder, but compatibility has not been verified host by host. Copying `SKILL.md` alone is not sufficient; keep `scripts/`, `assets/`, and `references/` alongside it.
+Among the adjacent projects reviewed, **[visual-explainer](https://github.com/nicobailon/visual-explainer)** has the largest GitHub audience: about **10.6k stars** when checked on October 21, 2026. It has earned that audience with a broad, feature-rich toolkit. These projects prove there is demand for richer Agent output. VibeView’s opportunity is to own one promise readers can repeat: **make the answer you already have feel effortless to understand.** Star counts change over time.
 
-## Build the example without an Agent
+**The VibeView sweet spot:** the answer is already there, but plain text makes the idea harder to see than it should be.
 
-Clone the project into a new directory, then run:
+<details>
+<summary><strong>Other tools for nearby jobs</strong></summary>
+
+- [Claude Artifacts](https://support.anthropic.com/en/articles/9487310-what-are-artifacts-and-how-do-i-use-them) for creating and iterating on interactive artifacts inside Claude.
+- [Napkin AI](https://www.napkin.ai/) for turning text into visual assets such as diagrams and infographics.
+- [Gamma](https://gamma.app/) for designed presentations, documents, webpages, and social posts.
+- [Mermaid](https://mermaid.js.org/intro/) for diagrams maintained as text in documentation and code.
+
+</details>
+
+## Get started
+
+VibeView follows the [open Agent Skills format](https://agentskills.io/home). Use it in any compatible Agent harness that loads standard Skills and can run local Python scripts; the install path depends on your harness.
 
 ```bash
 git clone https://github.com/tahoeliu/vibeview.git
-cd vibeview
+```
+
+Place the `vibeview` folder in your harness’s Skills directory, then reload Skills if needed. Keep the complete folder: `SKILL.md`, `scripts/`, `assets/`, and `references/`.
+
+In a conversation, try:
+
+```text
+vv turn the explanation above into a visual guide. Keep the evidence, edge cases, and sources visible.
+```
+
+The Agent creates the page from the current context. VibeView contributes the visual storytelling guidance and local builder; the Agent remains responsible for the new explanation and visual composition.
+
+### Preview the included example without an Agent
+
+The repository includes a ready-made English example. Build it locally with Python 3:
+
+```bash
 python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html \
   --title "After a timeout, don't do the same thing twice" --theme violet
 ```
 
-Open `preview.html` in a browser. On macOS:
+Open `preview.html` in a browser. The builder uses only Python’s standard library and refuses to overwrite an existing output. It assembles an authored HTML fragment; it does not convert Markdown into diagrams.
 
-```bash
-open preview.html
-```
+## A better way to read what AI already knows
 
-**Choose a new output filename each time.** The tool refuses to overwrite an existing file, and the output directory must already exist.
+- **The right picture for this idea.** The Agent chooses a visual structure for the explanation instead of squeezing every topic into the same template.
+- **The detail stays with the story.** Readers get the main idea at a glance and the evidence, caveats, tables, and sources when they need them.
+- **Start where the thinking happened.** VibeView works from the current conversation and completed Agent work, without asking you to create a separate report first.
+- **Designed to feel good to read.** Visual hierarchy, a clear focal point, and intentional pacing turn “I know the answer” into “I get it.”
+- **Simple to keep and share.** The current composer produces a standalone page with no JavaScript, remote fonts, or server in its default shell.
 
-This reproduces the pre-authored example; **Python does not turn Markdown into diagrams.** To create new visual content, use an Agent or write an HTML fragment yourself.
+## Where it fits—and where it doesn’t
 
-## How it works
+VibeView is built for mechanisms, comparisons, explainers, and analysis that is ready to present. It is not a live dashboard, automatic fact-checker, or substitute for research. Check facts, sources, assumptions, and conclusions before sharing. The local builder checks authored markup; it is not a full sanitizer for untrusted HTML.
 
-```text
-Your instruction + material already in the conversation
-                         ↓
-Agent identifies the point and authors HTML / SVG plus optional CSS
-                         ↓
-compose.py checks the fragment, embeds base styles, and adds the brand shell
-                         ↓
-One new HTML file → read it in a browser
-```
+<details>
+<summary><strong>Technical details, boundaries, and release notes</strong></summary>
 
-The default path does not prescribe a page template. Four base themes are available: `violet`, `blue`, `sage`, and `amber`. You can override styles or use `--bare` to keep only the brand shell.
+- Current release: **1.5.2**. The repository includes a standalone HTML composer, reusable CSS primitives, an optional JSON renderer, and a visual reading example.
+- Python 3 is required for local scripts. The scripts use the standard library; no package installation is needed.
+- The included example completed 100 isolated regression cases on Python 3.13.12 / macOS. This does not establish cross-platform behavior or make arbitrary HTML safe.
+- The Agent host controls model use and network access. A local build does not mean the full workflow is offline.
+- The example adds a narrow-screen layout, but VibeView is desktop-first and has not been validated across every mobile device.
+- Generated pages are local files. Publishing or hosting them is a separate step; check for sensitive content before sharing.
 
-```bash
-python3 -B scripts/compose.py your-fragment.html your-page.html \
-  --title "Your topic" --theme sage
-```
+</details>
 
-The fragment must include its own `<h1>` and must not include full-page `html/head/body/main/header/footer` wrappers. Use it only for trusted content you or an Agent have newly authored.
+## Help it reach more people
 
-Regular, structured comparisons can also use the [JSON component path](references/template.md). It is an option, not the default way to compose a page.
+If VibeView makes a difficult answer easier to follow, **[star the repository](https://github.com/tahoeliu/vibeview)** or share a sanitized example. Contributions that improve visual examples, documentation, or reproducible bug reports are welcome.
 
-## Scope and limitations
-
-| Boundary | What it means |
-| --- | --- |
-| Desktop-first reading | The example includes a narrow-screen layout; that does not mean the Skill is fully adapted to every mobile device. |
-| Not a Markdown parser | In version 1.5.2, `compose.py` accepts an HTML fragment. Markdown may be input material for the Agent. |
-| Not an HTML sanitizer | Static checks cannot make arbitrary external HTML safe. Do not pass untrusted webpages directly to the composer. |
-| Local build does not mean the whole workflow is offline | Model requests depend on the Agent host. Handle sensitive material according to your model and privacy settings. |
-| Diagrams are not fact-checking | Check data, sources, assumptions, and conclusions. A diagram must not be used to manufacture evidence. |
-| A file is not a deployment | This tool creates a local HTML file. Uploading or hosting it requires a separate action; check for sensitive content before sharing. |
-| Results depend on authorship | There is no guarantee that every page will look equally good and no unmeasured speedup claim. |
-
-## Release and feedback
-
-Current release: **1.5.2**, a minimal fix on the author's installed 1.5.1 stable version. It does **not** include 1.7.0 or experimental Next code.
-
-This release uses the actual HTML title instead of text matching, checks local CSS/SVG references, and reports success with a clear warning if the output was created but temporary-file cleanup failed. An exception may still leave a temporary file; inspect the path in the warning and do not modify a staging file that shares content with the finished output.
-
-The release completed 100 isolated regression cases on Python 3.13.12 / macOS, covering theme combinations, input boundaries, concurrent conflicts, and fault injection. This is not a guarantee of cross-platform behavior, long-running reliability, or safety for arbitrary untrusted HTML.
-
-If you encounter an output error, open an [issue](https://github.com/tahoeliu/vibeview/issues) with the version, Python and OS versions, command, error message, and a minimal reproducible example you can share publicly. Do not upload keys, tokens, or business-confidential material.
-
-Contributions that improve diagram examples, documentation, or reproducible bug reports are welcome. If VibeView helped you explain a difficult topic, consider starring the project or sharing a sanitized example.
+Found a problem? [Open an issue](https://github.com/tahoeliu/vibeview/issues) with the version, Python/OS version, command, error, and a minimal example that is safe to share. Never post tokens, keys, or confidential material.
 
 ## License
 
-[MIT](LICENSE) © 2026 tahoeliu.
+MIT © 2026 tahoeliu. See [LICENSE](LICENSE).
