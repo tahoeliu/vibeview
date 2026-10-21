@@ -28,7 +28,7 @@ vv make the explanation above easier to understand
 
 **Why can retrying after a timeout create duplicate work?** This example makes the request sequence visible, then walks through the rules and their limits.
 
-[![An actual VibeView output: an English visual guide to API timeouts, retries, and idempotency keys, with a request sequence diagram.](https://tahoeliu.github.io/vibeview/)](https://tahoeliu.github.io/vibeview/)
+[![An actual VibeView output: an English visual guide to API timeouts, retries, and idempotency keys, with a request sequence diagram.](docs/preview.jpg)](https://tahoeliu.github.io/vibeview/)
 
 <p align="center">
   <a href="https://tahoeliu.github.io/vibeview/"><strong>Open the live demo ↗</strong></a> ·
