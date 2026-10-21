@@ -67,23 +67,23 @@ GitHub 文件页只显示 HTML 源码；下载后用浏览器打开，或按照�
 
 ### 需要什么
 
-- 能加载本地 `SKILL.md` 并运行本地脚本的 Agent 宿主；本项目以 **WorkBuddy** 为使用环境。
+- 支持标准 Agent Skills 格式并能运行本地 Python 脚本的 harness。
 - Python 3；本次验证环境为 Python 3.13.12 / macOS。脚本只用标准库，无须 `pip install`。
 - Git，用于下面的安装命令；也可以下载 ZIP 后手动放入技能目录。
 
-### 安装到 WorkBuddy
+### 安装
 
-在 macOS / Linux 终端执行：
+在 harness 配置的 Skills 目录中克隆仓库（macOS / Linux）：
 
 ```bash
-git clone https://github.com/tahoeliu/vibeview.git "$HOME/.workbuddy/skills/vibeview"
+git clone https://github.com/tahoeliu/vibeview.git vibeview
 ```
 
 目标目录必须不存在；不要覆盖已有安装。你也可以在已配置 SSH 时使用仓库的 SSH 克隆地址。
 
-> **已有 VibeView / VibePreview / TahoeView？** 先在宿主中确认旧 Skill 的实际目录。本项目作者的旧安装目录名为 `tahoeview`，Skill 名称已是 `vibeview`。不要把新旧副本同时加载；先备份并停用旧版，再安装。上面的命令不会自动迁移或删除旧版。
+如果已经安装 VibeView，请选择新的目标目录，或按宿主的常规流程更新现有安装；不要克隆覆盖已有目录。
 
-让 WorkBuddy 重新加载本地技能；若尚未识别，可重启应用或新开会话。然后在对话里输入：
+按照 harness 的说明重新加载本地 Skills；若尚未识别，可重启应用或新开会话。然后在对话里输入：
 
 ```text
 vv 用网页解释为什么超时重试可能产生重复操作，保留并发和过期边界
@@ -91,7 +91,7 @@ vv 用网页解释为什么超时重试可能产生重复操作，保留并发�
 
 Agent 会根据材料创作 HTML/SVG，调用本地工具生成页面。输出位置和预览方式由宿主及当前任务决定。
 
-其他支持本地 Skill 的宿主可尝试加载整个文件夹，但**尚未逐一验证兼容性**。只复制 `SKILL.md` 不够，必须保留 `scripts/`、`assets/` 和 `references/`。
+VibeView 遵循标准 Agent Skills 格式。任何实现该格式并支持本地脚本执行的 harness 都可以使用。具体安装路径和重新加载方式取决于 harness。只复制 `SKILL.md` 不够，必须保留 `scripts/`、`assets/` 和 `references/`。
 
 ## 不接 Agent，也能先看效果
 

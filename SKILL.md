@@ -1,6 +1,6 @@
 ---
 name: vibeview
-description: Turn user instructions, the current conversation, and completed Agent work into an attractive, readable visual webpage. Invoke with the natural-language convention `vv`, such as “vv summarize the analysis so far.” Also recognizes VibePreview and TahoeView. Use by default for complex or long-form answers when no format is specified; do not use for short answers. Readability and design quality come first, speed second. Compose for the content instead of defaulting to a template.
+description: Turn user instructions, the current conversation, and completed Agent work into an attractive, readable visual webpage. Invoke with the natural-language convention `vv`, such as “vv summarize the analysis so far.” Use by default for complex or long-form answers when no format is specified; do not use for short answers. Readability and design quality come first, speed second. Compose for the content instead of defaulting to a template.
 agent_created: true
 version: 1.5.2
 ---

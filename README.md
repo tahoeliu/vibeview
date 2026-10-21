@@ -65,23 +65,27 @@ You are already discussing the problem with an Agent, and the answer is already 
 
 ### Requirements
 
-- An Agent host that can load a local `SKILL.md` and run local scripts. This project was built for **WorkBuddy**.
-- Python 3. The validation environment for this release was Python 3.13.12 on macOS. The scripts use only the standard library; no `pip install` is needed.
-- Git for the command below. You can also download the ZIP and copy it into the Skills directory manually.
+- A harness that implements the standard Agent Skills format and can run local Python scripts.
+- Python 3. This release was validated with Python 3.13.12 on macOS. The scripts use only the standard library; no `pip install` is needed.
+- Git, or download the ZIP and copy the complete project folder into your harness's Skills directory.
 
-### Install in WorkBuddy
+### Install
 
-Run this in a macOS or Linux terminal:
+Clone the repository into the Skills directory used by your harness. For example:
 
 ```bash
-git clone https://github.com/tahoeliu/vibeview.git "$HOME/.workbuddy/skills/vibeview"
+git clone https://github.com/tahoeliu/vibeview.git vibeview
 ```
 
-The destination directory must not already exist; do not overwrite an existing installation. If SSH is configured, you can use the repository's SSH clone URL instead.
+Keep the complete folder structure (`SKILL.md`, `scripts/`, `assets/`, and `references/`). Reload or restart your harness if needed, then start a conversation and try:
 
-> **Already using VibeView, VibePreview, or TahoeView?** First locate the old Skill in your host. The author's former installation directory was named `tahoeview`, while the Skill itself was already named `vibeview`. Do not load both copies at once. Back up and disable the old copy before installing this one. The command above does not migrate or remove an older version.
+```text
+vv explain how a timeout retry can create a duplicate operation, including concurrency and expiration limits
+```
 
-Ask WorkBuddy to reload local Skills. If it does not recognize the Skill, restart the app or start a new session. Then try:
+VibeView follows the standard Agent Skills format. Any harness that implements that format and supports local script execution can use it. The exact installation path and reload steps depend on the harness.
+
+If VibeView is already installed, choose a new destination or update the existing copy using your harness's usual process; do not clone over an existing directory.
 
 ```text
 vv explain how a timeout retry can create a duplicate operation, including concurrency and expiration limits

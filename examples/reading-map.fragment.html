@@ -52,16 +52,16 @@
     <line x1="676" y1="234" x2="330" y2="234" stroke="#a45441" stroke-width="2" stroke-dasharray="7 6"></line><path d="M299 225 L317 243 M317 225 L299 243" stroke="#a45441" stroke-width="2.5"></path>
     <text x="346" y="218" font-size="13" fill="#a45441">Success receipt lost or delayed</text>
     <rect x="81" y="220" width="128" height="40" rx="20" fill="#fcf0e9" stroke="#dbb4a7"></rect><text x="145" y="245" text-anchor="middle" font-size="15" font-weight="600" fill="#a45441">Timeout ≠ Not executed</text>
-    <text x="805" y="284" font-size="12" fill="#6d657b">The business commit and record must stay consistent.</text><text x="805" y="307" font-size="12" fill="#6d657b">A crash must not erase the deduplication record.</text>
+    <text x="805" y="284" font-size="12" fill="#6d657b">State and record must stay in sync.</text><text x="805" y="307" font-size="12" fill="#6d657b">A crash must not erase the deduplication record.</text>
     <text x="195" y="295" font-size="13" font-weight="600" fill="#7041b5">Retry · Reuse K-A and the same parameters</text>
     <line x1="145" y1="315" x2="678" y2="315" stroke="#7041b5" stroke-width="3" marker-end="url(#arrow-violet)"></line><circle cx="145" cy="315" r="6" fill="#7041b5"></circle>
     <path d="M690 315 L766 315 L786 340" fill="none" stroke="#b29aca" stroke-width="1.5"></path>
-    <rect x="805" y="331" width="237" height="51" rx="4" fill="#fff"></rect><text x="923" y="353" text-anchor="middle" font-size="13" font-weight="600" fill="#326f62">Match record → Return original result</text><text x="923" y="372" text-anchor="middle" font-size="11" fill="#6d657b">No new task is created</text>
+    <rect x="805" y="331" width="237" height="51" rx="4" fill="#fff"></rect><text x="923" y="353" text-anchor="middle" font-size="13" font-weight="600" fill="#326f62">Match → Return original result</text><text x="923" y="372" text-anchor="middle" font-size="11" fill="#6d657b">No new task is created</text>
     <line x1="682" y1="386" x2="150" y2="386" stroke="#326f62" stroke-width="3" marker-end="url(#arrow-green)"></line><text x="356" y="370" font-size="14" fill="#326f62" font-weight="600">Return the saved ARC-17 result</text>
     <text x="145" y="443" text-anchor="middle" font-size="12" fill="#326f62">Result received</text><text x="682" y="443" text-anchor="middle" font-size="12" fill="#326f62">Still the original task</text>
   </svg>
   </div>
-  <figcaption><span><strong>This diagram shows one case: success with no receipt received.</strong>A timeout can also happen before arrival or while work is still in progress.</span><span>Scroll the diagram horizontally on narrow screens</span></figcaption>
+  <figcaption><span><strong>This diagram shows one case: success with no receipt received.</strong> A timeout can also happen before arrival or while work is still in progress.</span><span>Scroll the diagram horizontally on narrow screens</span></figcaption>
 </figure>
 <div class="rm-thesis"><span class="vv-kicker">One intuition to correct</span><p>A timeout means <strong>you do not know the result yet</strong>;<br>it is not the server’s “undo” button. <em>Sending again does not mean executing again.</em></p></div>
 <section class="rm-section" aria-labelledby="identity-title">
