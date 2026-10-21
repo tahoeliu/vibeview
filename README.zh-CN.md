@@ -24,11 +24,11 @@ vv 把上面的解释变得更好懂
 
 **为什么超时后重试，可能创建重复任务？** 这个示例先画出请求时序，再解释处理规则及其边界。
 
-[![VibeView 实际输出：英文版 API 超时、重试与幂等键视觉讲解。](docs/preview.png)](docs/preview.png)
+[![VibeView 实际输出：英文版 API 超时、重试与幂等键视觉讲解。](docs/preview.jpg)](docs/preview.jpg)
 
-[示例页面源码](docs/index.html) · [下载页面](https://raw.githubusercontent.com/tahoeliu/vibeview/main/docs/index.html) · [原始问题与答案](examples/reading-map.input.md)
+[打开在线示例](https://tahoeliu.github.io/vibeview/) · [页面源码](examples/reading-map.fragment.html) · [原始问题与答案](examples/reading-map.input.md)
 
-截图来自本仓库组装器生成的页面。工程场景为虚构示例。将页面保存为 `.html` 后用浏览器打开，也可以运行下方命令在本机构建。
+截图来自本仓库组装器生成的页面。工程场景为虚构示例。可以直接打开在线示例，也可以运行下方命令在本机构建。
 
 ## 你想把什么讲清楚？
 

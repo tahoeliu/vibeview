@@ -8,7 +8,7 @@
 
 An open-source **Agent Skill** that turns long AI answers into clear visual explanations, right from your conversation.
 
-[**Get started**](#get-started) · [See a real example](#see-a-real-example) · [Compare skills](#compare-visual-skills) · [简体中文](README.zh-CN.md)
+[**Get started**](#get-started) · [Live demo ↗](https://tahoeliu.github.io/vibeview/) · [Compare skills](#compare-visual-skills) · [简体中文](README.zh-CN.md)
 
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-7041b5?style=flat-square)](https://agentskills.io/home) [![Python 3](https://img.shields.io/badge/Python-3-3776ab?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![MIT](https://img.shields.io/badge/License-MIT-326f62?style=flat-square)](LICENSE)
 
@@ -28,15 +28,15 @@ vv make the explanation above easier to understand
 
 **Why can retrying after a timeout create duplicate work?** This example makes the request sequence visible, then walks through the rules and their limits.
 
-[![An actual VibeView output: an English visual guide to API timeouts, retries, and idempotency keys, with a request sequence diagram.](docs/preview.png)](docs/preview.png)
+[![An actual VibeView output: an English visual guide to API timeouts, retries, and idempotency keys, with a request sequence diagram.](https://tahoeliu.github.io/vibeview/)](https://tahoeliu.github.io/vibeview/)
 
 <p align="center">
-  <a href="docs/index.html"><strong>Example page source</strong></a> ·
-  <a href="https://raw.githubusercontent.com/tahoeliu/vibeview/main/docs/index.html"><strong>Download the page</strong></a> ·
+  <a href="https://tahoeliu.github.io/vibeview/"><strong>Open the live demo ↗</strong></a> ·
+  <a href="examples/reading-map.fragment.html">Page source</a> ·
   <a href="examples/reading-map.input.md">Original question and answer</a>
 </p>
 
-This is a screenshot of a page built with the included composer. The scenario is fictional; the output is real. Save the example as an `.html` file and open it in a browser, or [build it locally](#build-the-example).
+This is a screenshot of a page built with the included composer. The scenario is fictional; the output is real. Explore the live demo or [build it locally](#build-the-example).
 
 ## What would you like to make clear?
 
