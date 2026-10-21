@@ -1,0 +1,122 @@
+<style>
+:root{--vv-bg:#faf8fd;--vv-ink:#292139;--vv-muted:#6d657b;--vv-accent:#7041b5;--vv-soft:#eee5fa;--vv-line:#ded5e9;--rm-green:#326f62;--rm-rust:#a45441}
+.vv-wrap{max-width:1152px;width:calc(100% - 112px)}
+.vv-brandbar{padding:18px 0}.vv-brandbar a{font-size:27px}
+.rm-intro{padding:44px 0 35px}.rm-eyebrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;letter-spacing:.1em;color:var(--vv-muted);margin-bottom:30px}.rm-eyebrow strong{color:var(--vv-accent);font-weight:600}
+.rm-hero{display:grid;grid-template-columns:minmax(0,1fr) 244px;gap:48px;align-items:end}.rm-hero h1{font-size:clamp(42px,4.5vw,62px);line-height:1.2;letter-spacing:-.045em}.rm-hero h1 span{color:var(--vv-accent)}.rm-deck{font-size:18px;max-width:710px;margin-top:22px;line-height:1.85;color:var(--vv-muted)}.rm-margin{border-left:1px solid var(--vv-line);padding-left:22px;font-size:13px;color:var(--vv-muted)}.rm-margin strong{display:block;font-size:15px;color:var(--vv-ink);margin-bottom:10px}.rm-margin p+p{margin-top:10px}
+.rm-figure{border:1px solid var(--vv-line);background:linear-gradient(120deg,#fff 0%,#f4eefb 100%);padding:26px 28px 20px;box-shadow:0 24px 65px -45px #5c377980}.rm-figure-top{display:flex;align-items:baseline;justify-content:space-between;gap:20px}.rm-figure-top h2{font-size:24px;letter-spacing:-.025em}.rm-figure-top p{font-size:12px;color:var(--vv-muted)}.rm-diagram-scroll{overflow-x:auto;margin-top:14px}.rm-diagram{display:block;width:100%;min-width:740px;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}.rm-figure figcaption{border-top:1px solid var(--vv-line);padding-top:14px;margin-top:0;display:flex;gap:24px;justify-content:space-between}.rm-figure figcaption strong{color:var(--vv-ink)}
+.rm-thesis{display:grid;grid-template-columns:170px 1fr;gap:35px;padding:40px 0 46px;align-items:start}.rm-thesis .vv-kicker{margin:7px 0 0}.rm-thesis p{font-size:28px;line-height:1.55;letter-spacing:-.035em}.rm-thesis em{font-style:normal;color:var(--vv-accent);border-bottom:2px solid #c9b5e7;padding-bottom:4px}
+.rm-section{padding:48px 0;border-top:1px solid var(--vv-line)}.rm-heading{display:grid;grid-template-columns:170px 1fr;gap:35px;margin-bottom:28px}.rm-heading .vv-kicker{margin:8px 0 0}.rm-heading h2{font-size:34px;line-height:1.28;letter-spacing:-.025em}.rm-heading p{font-size:16px;color:var(--vv-muted);margin-top:13px;max-width:730px}
+.rm-compare{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--vv-line);border-bottom:1px solid var(--vv-line)}.rm-case{padding:27px 32px 27px 0}.rm-case+.rm-case{padding-left:32px;padding-right:0;border-left:1px solid var(--vv-line)}.rm-case-label{font-size:12px;letter-spacing:.12em;color:var(--vv-accent);margin-bottom:12px}.rm-case h3{font-size:25px;line-height:1.3}.rm-case>p{font-size:15px;color:var(--vv-muted);margin-top:17px}.rm-case strong{color:var(--vv-ink)}.rm-mini{display:block;width:100%;margin-top:16px}.rm-case-note{border-top:1px solid var(--vv-line);padding-top:13px;min-height:68px}.rm-caution{color:var(--rm-rust)}
+.rm-contract{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:44px;align-items:start}.rm-table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75}.rm-table th{text-align:left;color:var(--vv-muted);font-size:12px;font-weight:500;padding:0 12px 12px 0;border-bottom:2px solid var(--vv-ink)}.rm-table td{vertical-align:top;padding:16px 12px 16px 0;border-bottom:1px solid var(--vv-line)}.rm-table td:first-child{width:24%;font-weight:600}.rm-table td:nth-child(2){width:17%;color:var(--vv-muted)}.rm-record{padding:24px;background:#f0e8f8;border-top:3px solid var(--vv-accent)}.rm-record h3{font-size:19px}.rm-record dl{font-size:13px;margin:22px 0 0}.rm-record dl>div{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #dacde8;padding:9px 0}.rm-record dt{color:var(--vv-muted)}.rm-record dd{margin:0;text-align:right;font-weight:600}.rm-record p{margin-top:17px;font-size:12px;color:var(--vv-muted)}
+.rm-boundaries{background:#efe8f7;border-block:1px solid var(--vv-line);padding:46px 0}.rm-boundaries .rm-heading{margin-bottom:32px}.rm-boundary-list{margin-left:205px}.rm-boundary{display:grid;grid-template-columns:42px 150px 1fr;gap:18px;padding:22px 0;border-top:1px solid #d7c9e6}.rm-boundary .rm-number{font:27px/1.25 Georgia,serif;color:var(--vv-accent)}.rm-boundary h3{font-size:19px;line-height:1.5}.rm-boundary p{font-size:14px;color:#5e546c;line-height:1.9}.rm-boundary strong{color:var(--vv-ink)}
+.rm-ending{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:70px;padding:48px 0}.rm-ending h2{font-size:35px;line-height:1.35}.rm-ending .vv-kicker{margin-bottom:15px}.rm-ending p{margin-top:18px;color:var(--vv-muted);font-size:15px}.rm-checklist{margin:0;padding:0;list-style:none;counter-reset:steps}.rm-checklist li{counter-increment:steps;display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--vv-line);font-size:14px}.rm-checklist li:before{content:counter(steps,decimal-leading-zero);color:var(--vv-accent);font-family:ui-monospace,monospace;font-size:12px;padding-top:2px}
+.rm-source{border-top:1px solid var(--vv-line);padding:24px 0 32px;font-size:12px;color:var(--vv-muted)}.rm-source p+p{margin-top:9px}.rm-source strong{color:var(--vv-ink)}.rm-source code{font-size:11px;overflow-wrap:anywhere}.rm-source pre{padding:14px 18px;background:#f0ecf5;font-size:11px;line-height:1.8;margin:14px 0 0}.rm-footerline{display:flex;justify-content:space-between;gap:20px;margin-top:16px;font-size:11px;letter-spacing:.08em}
+@media(max-width:800px){.vv-wrap{width:calc(100% - 40px)}.rm-intro{padding-top:28px}.rm-hero{grid-template-columns:1fr;gap:24px}.rm-hero h1{font-size:clamp(35px,6.8vw,52px)}.rm-margin{max-width:520px}.rm-figure{padding:20px 16px 16px}.rm-figure-top,.rm-figure figcaption{display:block}.rm-figure-top p{margin-top:9px}.rm-figure figcaption span{display:block;margin-top:6px}.rm-thesis,.rm-heading{grid-template-columns:1fr;gap:12px}.rm-thesis{padding:30px 0}.rm-thesis p{font-size:24px}.rm-heading h2{font-size:29px}.rm-compare,.rm-contract,.rm-ending{grid-template-columns:1fr;gap:24px}.rm-case{padding:24px 0}.rm-case+.rm-case{padding:24px 0;border-left:0;border-top:1px solid var(--vv-line)}.rm-boundary-list{margin-left:0}.rm-boundary{grid-template-columns:30px 1fr;gap:10px 14px}.rm-boundary p{grid-column:2}.rm-section{padding:34px 0}.rm-ending{padding:35px 0}.rm-ending h2{font-size:30px}.rm-table{font-size:13px}.rm-table td{padding-right:8px}.rm-footerline{flex-wrap:wrap}}
+@media print{.rm-diagram{min-width:0}.rm-diagram-scroll{overflow:visible}.rm-figure{box-shadow:none}.rm-boundaries{break-inside:avoid}}
+</style>
+<div class="vv-wrap">
+<section class="rm-intro" aria-labelledby="reading-title">
+  <div class="rm-eyebrow"><strong>把复杂回答变成可读的网页</strong><span>工程阅读示例 · VibeView 1.5.2</span></div>
+  <div class="rm-hero">
+    <div><h1 id="reading-title">超时之后，<br><span>别把同一件事做两遍</span></h1><p class="rm-deck">为什么重试会导致重复操作？关键不在“再发一次”，而在于让服务端认出：这是<strong>同一件事的重试</strong>，还是<strong>一件新的事</strong>。</p></div>
+    <aside class="rm-margin"><strong>完全虚构的工程情境</strong><p>“纸舟归档服务”、接口、键与任务编号均为教学示意，不对应真实产品或事故。</p><p>这里只解释机制，不声称实测收益。</p></aside>
+  </div>
+</section>
+<figure class="rm-figure" aria-labelledby="sequence-title">
+  <div class="rm-figure-top"><h2 id="sequence-title">工作已经完成，回执却没回来。</h2><p>同一业务操作 · 同一组参数 · 有效保留期内</p></div>
+  <div class="rm-diagram-scroll">
+  <svg class="rm-diagram" viewBox="0 0 1090 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flow-title flow-desc">
+    <title id="flow-title">客户端超时后以同一个幂等键重试，取得原任务结果</title>
+    <desc id="flow-desc">时间向下。客户端以 K-A 发起归档，服务端原子占用键并成功创建 ARC-17，保存结果。首次成功回执丢失或延迟，客户端超时。客户端复用 K-A 和相同参数重试，命中有效记录，拿到 ARC-17 的原结果，不创建新任务。此图假设服务端记录与业务提交保持一致。</desc>
+    <defs>
+      <marker id="arrow-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#7041b5"></path></marker>
+      <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#326f62"></path></marker>
+    </defs>
+    <rect x="782" y="66" width="286" height="344" rx="6" fill="#e8def3"></rect>
+    <text x="145" y="34" text-anchor="middle" font-size="18" font-weight="650" fill="#292139">客户端</text>
+    <text x="682" y="34" text-anchor="middle" font-size="18" font-weight="650" fill="#292139">归档服务</text>
+    <text x="805" y="95" font-size="12" fill="#6d657b" letter-spacing="2">服务端记住的不是次数</text>
+    <line x1="145" y1="56" x2="145" y2="425" stroke="#c7b6dc" stroke-width="2"></line>
+    <line x1="682" y1="56" x2="682" y2="425" stroke="#c7b6dc" stroke-width="2"></line>
+    <line x1="32" y1="87" x2="32" y2="400" stroke="#d4c9e1"></line><path d="M28 394 L32 402 L36 394" fill="none" stroke="#aaa0b9"></path>
+    <text x="20" y="70" font-size="11" fill="#8a7f98">时间</text>
+    <text x="195" y="83" font-size="13" fill="#7041b5" font-weight="600">首次发送 · K-A</text><text x="195" y="105" font-size="12" fill="#6d657b">POST /archives · project=demo, format=zip</text>
+    <line x1="145" y1="123" x2="678" y2="123" stroke="#7041b5" stroke-width="3" marker-end="url(#arrow-violet)"></line><circle cx="145" cy="123" r="6" fill="#7041b5"></circle>
+    <rect x="675" y="123" width="14" height="97" rx="3" fill="#7041b5"></rect><path d="M694 152 L757 152 L775 170" fill="none" stroke="#b29aca" stroke-width="1.5"></path>
+    <text x="805" y="128" font-size="17" font-weight="600" fill="#292139">一个操作，一条有效记录</text>
+    <text x="805" y="166" font-size="12" fill="#6d657b">幂等键</text><text x="1042" y="166" text-anchor="end" font-size="16" font-weight="650" fill="#7041b5">K-A</text><line x1="805" y1="181" x2="1043" y2="181" stroke="#d2c1e3"></line>
+    <text x="805" y="204" font-size="12" fill="#6d657b">参数</text><text x="1042" y="204" text-anchor="end" font-size="13" fill="#292139">demo / zip</text><line x1="805" y1="219" x2="1043" y2="219" stroke="#d2c1e3"></line>
+    <text x="805" y="242" font-size="12" fill="#6d657b">结果</text><text x="1042" y="242" text-anchor="end" font-size="16" font-weight="650" fill="#326f62">ARC-17 · 已完成</text>
+    <text x="715" y="183" font-size="11" fill="#7041b5" text-anchor="middle"><tspan x="733" dy="0">原子占用</tspan><tspan x="733" dy="19">执行业务</tspan><tspan x="733" dy="19">保存结果</tspan></text>
+    <line x1="676" y1="234" x2="330" y2="234" stroke="#a45441" stroke-width="2" stroke-dasharray="7 6"></line><path d="M299 225 L317 243 M317 225 L299 243" stroke="#a45441" stroke-width="2.5"></path>
+    <text x="346" y="218" font-size="13" fill="#a45441">成功回执丢失或延迟</text>
+    <rect x="81" y="220" width="128" height="40" rx="20" fill="#fcf0e9" stroke="#dbb4a7"></rect><text x="145" y="245" text-anchor="middle" font-size="15" font-weight="600" fill="#a45441">超时 ≠ 未执行</text>
+    <text x="805" y="284" font-size="12" fill="#6d657b">业务提交与记录必须保持一致。</text><text x="805" y="307" font-size="12" fill="#6d657b">不能在崩溃后丢失去重依据。</text>
+    <text x="195" y="295" font-size="13" font-weight="600" fill="#7041b5">重试 · 仍用 K-A，参数不变</text>
+    <line x1="145" y1="315" x2="678" y2="315" stroke="#7041b5" stroke-width="3" marker-end="url(#arrow-violet)"></line><circle cx="145" cy="315" r="6" fill="#7041b5"></circle>
+    <path d="M690 315 L766 315 L786 340" fill="none" stroke="#b29aca" stroke-width="1.5"></path>
+    <rect x="805" y="331" width="237" height="51" rx="4" fill="#fff"></rect><text x="923" y="353" text-anchor="middle" font-size="13" font-weight="600" fill="#326f62">命中原记录 → 取回原结果</text><text x="923" y="372" text-anchor="middle" font-size="11" fill="#6d657b">此路径不再创建任务</text>
+    <line x1="682" y1="386" x2="150" y2="386" stroke="#326f62" stroke-width="3" marker-end="url(#arrow-green)"></line><text x="356" y="370" font-size="14" fill="#326f62" font-weight="600">返回 ARC-17 的已保存结果</text>
+    <text x="145" y="443" text-anchor="middle" font-size="12" fill="#326f62">拿到结果</text><text x="682" y="443" text-anchor="middle" font-size="12" fill="#326f62">仍是原来的任务</text>
+  </svg>
+  </div>
+  <figcaption><span><strong>图解的是“已成功、未收到回执”的一种情况。</strong>超时也可能发生在请求未到达或仍在执行时。</span><span>窄屏可横向滚动关系图</span></figcaption>
+</figure>
+<div class="rm-thesis"><span class="vv-kicker">先纠正一个直觉</span><p>超时描述的是<strong>你还不知道结果</strong>，<br>不是服务端的“撤销键”。<em>再发送，不等于该再执行。</em></p></div>
+<section class="rm-section" aria-labelledby="identity-title">
+  <div class="rm-heading"><span class="vv-kicker">01 / 区分业务意图</span><div><h2 id="identity-title">键跟着“这件事”，不跟着“这次发送”。</h2><p>非天然幂等的创建操作，如果每次到达都被当成新操作，就可能产生重复任务。幂等键用来把多次发送归回同一个业务意图。</p></div></div>
+  <div class="rm-compare">
+    <article class="rm-case"><div class="rm-case-label">同一件事 · 重试</div><h3>“刚才那份归档，做好了吗？”</h3>
+      <svg class="rm-mini" viewBox="0 0 490 165" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="首次 K-A 与重试 K-A 汇入同一个任务 ARC-17">
+        <path d="M144 45 C235 45 218 83 288 83 M144 121 C235 121 218 83 288 83" fill="none" stroke="#9671c5" stroke-width="2.5"></path><path d="M279 77 L290 83 L279 89" fill="none" stroke="#7041b5" stroke-width="2.5"></path>
+        <rect x="0" y="22" width="144" height="47" rx="5" fill="#ede3fa"></rect><rect x="0" y="98" width="144" height="47" rx="5" fill="#ede3fa"></rect><text x="72" y="51" text-anchor="middle" font-size="15" fill="#7041b5">首次 · K-A</text><text x="72" y="127" text-anchor="middle" font-size="15" fill="#7041b5">重试 · K-A</text>
+        <path d="M312 45 L465 45 L482 62 L482 121 L312 121 Z" fill="#fff" stroke="#c6b6db"></path><path d="M465 45 L465 62 L482 62" fill="none" stroke="#c6b6db"></path><text x="397" y="77" text-anchor="middle" font-size="18" font-weight="600" fill="#292139">ARC-17</text><text x="397" y="103" text-anchor="middle" font-size="12" fill="#326f62">复用同一个业务结果</text>
+      </svg>
+      <p>首次提交前保存 <code>K-A</code> 与参数。结果未知时，<strong>复用原键、原参数</strong>；有效记录已完成，就返回原结果。</p><p class="rm-case-note">若原操作仍在处理中：按接口约定等待、查询或退避重试，<strong>不要启动第二份工作</strong>。</p>
+    </article>
+    <article class="rm-case"><div class="rm-case-label">另一件事 · 新操作</div><h3>“我明确还要再创建一份。”</h3>
+      <svg class="rm-mini" viewBox="0 0 490 165" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="K-A 对应 ARC-17，新键 K-B 对应另一任务 ARC-18">
+        <path d="M144 45 L290 45 M144 121 L290 121" fill="none" stroke="#9671c5" stroke-width="2.5"></path><path d="M280 39 L291 45 L280 51 M280 115 L291 121 L280 127" fill="none" stroke="#7041b5" stroke-width="2.5"></path>
+        <rect x="0" y="22" width="144" height="47" rx="5" fill="#ede3fa"></rect><rect x="0" y="98" width="144" height="47" rx="5" fill="#ede3fa"></rect><text x="72" y="51" text-anchor="middle" font-size="15" fill="#7041b5">原操作 · K-A</text><text x="72" y="127" text-anchor="middle" font-size="15" fill="#7041b5">新操作 · K-B</text>
+        <rect x="312" y="22" width="170" height="47" fill="#fff" stroke="#c6b6db"></rect><rect x="312" y="98" width="170" height="47" fill="#fff" stroke="#c6b6db"></rect><text x="397" y="51" text-anchor="middle" font-size="18" font-weight="600" fill="#292139">ARC-17</text><text x="397" y="127" text-anchor="middle" font-size="18" font-weight="600" fill="#292139">ARC-18</text>
+      </svg>
+      <p>只有新业务意图才使用新键 <code>K-B</code>。<strong>参数相同也可以是不同操作</strong>，不能只靠参数相同合并请求。</p><p class="rm-case-note"><strong class="rm-caution">不要因为超时就换键。</strong>新键可能创建另一任务；业务唯一约束若另行拦截，那是另一层保证。</p>
+    </article>
+  </div>
+</section>
+<section class="rm-section" aria-labelledby="contract-title">
+  <div class="rm-heading"><span class="vv-kicker">02 / 服务端如何判断</span><div><h2 id="contract-title">认得键，也要核对参数和状态。</h2><p>先验证身份、权限与参数，再在约定作用域内查找记录。键不是访问凭证；同键不同参数必须拒绝，不能覆盖原记录或悄悄重做。</p></div></div>
+  <div class="rm-contract">
+    <table class="rm-table"><caption class="vv-note" style="text-align:left;margin-bottom:16px">请求到达后的处理规则 · 以服务端契约为准</caption><thead><tr><th scope="col">记录情况</th><th scope="col">参数</th><th scope="col">处理方式</th></tr></thead><tbody>
+      <tr><td>无有效记录</td><td>请求合法</td><td>原子占用键，再执行。不能“查到没有”就直接开工。</td></tr>
+      <tr><td>处理中</td><td>一致</td><td>返回可识别的处理中状态，或按约定等待；不重复执行。</td></tr>
+      <tr><td>已完成</td><td>一致</td><td>返回已保存的业务结果或稳定引用。</td></tr>
+      <tr><td>有效记录存在</td><td>不一致</td><td><strong class="rm-caution">拒绝参数冲突</strong>；不覆盖、不复用错误结果、不执行新操作。</td></tr>
+      <tr><td>已过期或清理</td><td>无法确认</td><td>原保证不再成立。先核对业务状态，再走约定恢复路径。</td></tr>
+    </tbody></table>
+    <aside class="rm-record"><h3>一条记录的剖面</h3><dl><div><dt>作用域</dt><dd>租户 / 接口</dd></div><div><dt>键</dt><dd><code>K-A</code></dd></div><div><dt>参数摘要</dt><dd>规范化关键参数</dd></div><div><dt>状态</dt><dd>已完成</dd></div><div><dt>结果引用</dt><dd><code>ARC-17</code></dd></div><div><dt>保留期</dt><dd>由接口明确约定</dd></div></dl><p>键为教学占位符；生产键须在作用域内足够唯一。参数规范化及比较规则需写入契约。</p><p>复用的是业务结果，不要求所有传输头或响应字节完全一致。</p></aside>
+  </div>
+</section>
+</div>
+<section class="rm-boundaries" aria-labelledby="boundary-title"><div class="vv-wrap">
+  <div class="rm-heading"><span class="vv-kicker">03 / 保证有边界</span><div><h2 id="boundary-title">一个请求头，不等于“永远只执行一次”。</h2><p>幂等保证依赖服务端记录、原子性和保留期。客户端带上键，只是协议的开始。</p></div></div>
+  <div class="rm-boundary-list">
+    <article class="rm-boundary"><span class="rm-number">I</span><h3>并发时，<br>只能有一个执行者</h3><p>两个请求可能同时查到“没有记录”。要用<strong>唯一约束、事务或等效原子占用</strong>来竞争同一有效键；普通的“先查后写”不足以去重。</p></article>
+    <article class="rm-boundary"><span class="rm-number">II</span><h3>业务与记录，<br>不能各自成功</h3><p>防止“业务已提交，结果记录却没写入”的崩溃窗口。本例可将任务创建与完成记录放进同一事务。涉及跨系统副作用时，还需<strong>下游幂等、事务消息或对账</strong>等机制；本地事务、锁或缓存不自动覆盖远端动作。</p></article>
+    <article class="rm-boundary"><span class="rm-number">III</span><h3>记录到期，<br>保证也可能到期</h3><p>保留期要与重试窗口协调。记录过期、丢失或清理后，同键也可能被当作新请求。此时应<strong>用业务标识查询或走对账恢复</strong>，不能盲目重试或换键，更不能承诺永久去重或跨系统无条件 exactly-once。</p></article>
+  </div>
+</div></section>
+<div class="vv-wrap">
+<section class="rm-ending" aria-labelledby="takeaway-title">
+  <div><div class="vv-kicker">带走这条判断规则</div><h2 id="takeaway-title">重试重复的是发送，<br><span class="vv-accent">不应该重复业务意图。</span></h2><p>失败、回滚及可重试错误如何记录、何时允许重新执行，都需由接口契约规定。不能把所有失败都解释为“从未执行”。</p><p>退避减少请求压力，但<strong>退避本身不提供去重保证</strong>。</p></div>
+  <ol class="rm-checklist"><li><span>首次提交前，保存幂等键及对应参数。</span></li><li><span>遇到超时，先理解为“结果未知”。</span></li><li><span>在约定窗口内，同一操作复用原键原参数；按契约查询或退避重试。</span></li><li><span>只有明确的新业务意图，才生成新键。</span></li><li><span>超过保留期，先核对业务状态，再恢复。</span></li></ol>
+</section>
+<section class="rm-source" aria-label="示例来源与复现说明">
+  <p><strong>关于这份示例</strong>　本文全部业务名称、接口、参数、键、任务编号和交互情节均为虚构教学示意。没有真实事故归因、实测数据或量化收益声明。</p>
+  <p><strong>从复杂回答到阅读页面</strong>　原始问题与完整回答保存在 <code>examples/reading-map.input.md</code>；视觉正文为 <code>examples/reading-map.fragment.html</code>。页面依次展开请求关系、业务意图对照、处理规则与保证边界，而不是把长文切成小卡片。</p>
+  <p><strong>构建方式</strong>　由 VibeView 1.5.2 发布版的 <code>scripts/compose.py</code> 组装，内嵌 <code>assets/design.css</code>。组装器接收 HTML 片段，不解析 Markdown。以下命令在项目根目录执行；要求 <code>docs</code> 已存在且目标文件尚不存在。</p>
+  <pre><code>python3 -B scripts/compose.py examples/reading-map.fragment.html docs/index.html --title '超时之后，别把同一件事做两遍' --theme violet</code></pre>
+  <div class="rm-footerline"><span>纯静态 HTML / 无 JavaScript / 无外部字体或图片</span><span>可复现阅读示例 · 1.5.2</span></div>
+</section>
+</div>
