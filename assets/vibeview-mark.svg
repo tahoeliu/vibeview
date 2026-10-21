@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-labelledby="title desc">
+  <title id="title">VibeView</title>
+  <desc id="desc">A conversation flowing into a visual reading page.</desc>
+  <defs>
+    <linearGradient id="bg" x1="10" y1="8" x2="72" y2="74" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1E9FC"/>
+      <stop offset="1" stop-color="#E4F1EC"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="18" y1="18" x2="64" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8756C6"/>
+      <stop offset="1" stop-color="#5F3B9D"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="76" height="76" rx="24" fill="url(#bg)"/>
+  <path d="M13 20a7 7 0 0 1 7-7h19a7 7 0 0 1 7 7v16a7 7 0 0 1-7 7H28l-9 7v-8.4A7 7 0 0 1 13 36V20Z" fill="url(#ink)"/>
+  <circle cx="24" cy="28" r="2.2" fill="#fff"/>
+  <circle cx="30" cy="28" r="2.2" fill="#fff"/>
+  <circle cx="36" cy="28" r="2.2" fill="#fff"/>
+  <path d="M44 31h5" stroke="#9A76CC" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M49 31h4" stroke="#9A76CC" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="52" y="18" width="16" height="43" rx="4" fill="#fff" stroke="#7651B4" stroke-width="2.5"/>
+  <path d="M56 26h8M56 32h8M56 42l3.2 3.2L64 39" fill="none" stroke="#7651B4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M56 51h8" stroke="#B8A3D6" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="62" cy="68" r="3" fill="#347E62"/>
+  <path d="m57 68 3 3 6-7" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
