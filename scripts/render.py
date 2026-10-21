@@ -158,11 +158,11 @@ def render_block(b, index):
             maximum = max(values) or 1
             unit = esc(b.get('unit', ''))
             rows = ['<div class="bar-row"><span class="bar-label">' + esc(i.get('title', '')) + '</span><div class="track"><div class="fill" style="width:' + str(round(v / maximum * 100, 4)) + '%"></div></div><span class="bar-value">' + esc(str(v)) + unit + '</span></div>' for i, v in zip(items, values)]
-            body = '<div class="bars">' + ''.join(rows) + '<p class="caption">线性零基准；最长条对应本组最大值。' + esc(b.get('note', '')) + '</p></div>'
+            body = '<div class="bars">' + ''.join(rows) + '<p class="caption">Linear scale from zero; the longest bar represents the largest value in this group. ' + esc(b.get('note', '')) + '</p></div>'
         else:
             rows = []
             for i in items:
-                label = esc(i.get('title', '来源'))
+                label = esc(i.get('title', 'Source'))
                 link = '<a href="' + url(i['url']) + '" target="_blank" rel="noopener noreferrer">' + label + '</a>' if i.get('url') else label
                 rows.append('<li>' + link + paragraphs(i.get('text')) + '</li>')
             body = '<ul class="sources">' + ''.join(rows) + '</ul>'
@@ -181,7 +181,7 @@ class FinalCheck(HTMLParser):
             self.ids.add(a['id'])
 
 def render(data):
-    fields(data, 'title subtitle meta theme blocks', 'page')
+    fields(data, 'title subtitle meta theme language blocks', 'page')
     title = text(data.get('title'), 'title')
     if not title.strip():
         raise ValueError('title must not be empty')
@@ -193,7 +193,11 @@ def render(data):
         raise ValueError('blocks must contain 1..80 entries')
     css = (Path(__file__).resolve().parent.parent / 'assets/preview.css').read_text(encoding='utf-8')
     body = ''.join(render_block(b, n) for n, b in enumerate(blocks, 1))
-    page = '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + esc(title) + '</title><style>' + css + '</style></head><body data-theme="' + theme + '"><header><div class="wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"><section class="hero"><div class="wrap"><h1>' + esc(title) + '</h1><div class="lead">' + paragraphs(data.get('subtitle')) + '</div><p class="meta">' + esc(data.get('meta', '')) + '</p></div></section>' + body + '</main><footer><div class="wrap">VibeView · 单页可视化阅读</div></footer></body></html>'
+    language = data.get('language', 'en')
+    if language not in ('en', 'zh-CN'):
+        raise ValueError('language must be en or zh-CN')
+    footer = 'VibeView · Single-page visual reading' if language == 'en' else 'VibeView · 单页可视化阅读'
+    page = '<!doctype html>\n<html lang="' + language + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + esc(title) + '</title><style>' + css + '</style></head><body data-theme="' + theme + '"><header><div class="wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"><section class="hero"><div class="wrap"><h1>' + esc(title) + '</h1><div class="lead">' + paragraphs(data.get('subtitle')) + '</div><p class="meta">' + esc(data.get('meta', '')) + '</p></div></section>' + body + '</main><footer><div class="wrap">' + footer + '</div></footer></body></html>'
     checker = FinalCheck()
     checker.feed(page)
     if len(page.encode()) > 8 * 1024 * 1024:
@@ -214,7 +218,7 @@ def write_new(destination, page, warnings=None):
             f.write(page)
             f.flush()
             os.fsync(f.fileno())
-        # 排他发布；提交后清理失败不能把成功误报为失败。
+        # Publish exclusively; cleanup failure after publication must not turn success into failure.
         os.link(temp, dest)
         published = True
     finally:
@@ -224,7 +228,7 @@ def write_new(destination, page, warnings=None):
             except FileNotFoundError:
                 pass
             except OSError as exc:
-                message = ('输出已成功生成' if published else '输出未生成') + f'；临时文件清理失败：{temp}（{exc}）'
+                message = ('Output created successfully' if published else 'Output was not created') + f'; temporary-file cleanup failed: {temp} ({exc})'
                 if warnings is not None:
                     warnings.append(message)
                 else:

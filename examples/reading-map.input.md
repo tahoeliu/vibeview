@@ -1,55 +1,49 @@
-# 超时之后，别把同一件事做两遍
+# After a timeout, don't do the same thing twice
 
-> VibeView 1.5.1 的可复现阅读示例。本文的“纸舟归档服务”、接口、请求参数、幂等键、任务编号及交互情节完全虚构，仅用于工程机制教学，不对应真实产品、事故或实测结果。示例不声明任何量化收益。
+> A reproducible VibeView 1.5.2 reading example. The “Paperboat Archive Service,” its endpoint, request parameters, idempotency keys, task IDs, and interactions are entirely fictional. They are used only to teach engineering mechanisms and do not represent a real product, incident, or measured result. No quantitative benefit is claimed.
 
-## 原始问题
+## Original question
 
-为什么重试会导致重复操作？请用幂等键解释如何区分同一个业务操作的重试与一个新操作，特别说明超时、并发、参数冲突、服务端记录和保留期的边界。
+Our client calls an API to create an archive task, but the request times out. The server may have completed the work while its response was lost, or it may still be processing. If the client retries with a new idempotency key, could that create a duplicate task? How should the client and server handle retries safely? Explain the relationship among the key, request parameters, server-side records, concurrency, and expiration. Clearly state what is and is not guaranteed. Do not assume a specific API's undocumented behavior.
 
-## 复杂回答
+## Answer and technical context
 
-客户端发送请求、服务端执行业务操作、客户端收到回执，是不同的事件。超时只意味着客户端在等待期限内没有拿到结果，不能证明服务端没有执行：请求可能还未到达，可能正在执行，也可能已经成功但回执丢失或延迟。因此，重试能再次发出请求，却不能自动判断上一次有没有产生副作用。对创建任务这样的非天然幂等操作，如果服务端把每次到达都当成新操作，就可能创建重复任务。
+A timeout tells the client that it does not know the result; it does not prove that the server did not execute the request. The request may not have arrived, may still be processing, or may have succeeded while the response was lost or delayed. Treat the result as **unknown**, not as a confirmed failure.
 
-虚构的纸舟归档服务提供 `POST /archives`，参数为 `project=demo, format=zip`。用户想创建一个归档任务。客户端在第一次提交之前生成并保存幂等键 `K-A`，通过 `Idempotency-Key: K-A` 发送。服务端成功创建任务 `ARC-17`，但成功回执未能在期限内到达客户端，客户端看到超时。此时“结果未知”与“执行失败”不是一回事。
+For a retry of the same business operation, reuse the original idempotency key and the same parameters within the API's documented retry and retention window. A new key represents a new operation and may create another task. Do not change the key just because the client timed out. Idempotency keys are not universal API behavior: the client must check the interface contract for support, scope, parameter comparison, retention, in-progress behavior, failure handling, and recovery after expiration.
 
-幂等键表达的是一个业务操作的身份，而不是每次网络发送的身份。对同一个业务操作的重试，客户端应复用原键和原参数，不能因为超时就换键。用户明确想再创建一个归档任务时，才生成新键，例如 `K-B`。即使两个新操作参数完全一样，也不能只凭参数相同把它们合并；反过来，同一个键也不能代表不同参数的操作。示例中的 K-A、K-B 是教学占位符，生产系统应选择在约定作用域内足够唯一的键。
+Before execution, the server must perform authentication, authorization, and parameter validation. A record commonly includes a scope, key, normalized summary of relevant parameters, processing status, and completed business result or stable result reference. The server must reject the same key with different parameters and clearly report the conflict; it must not overwrite the record, silently reuse a mismatched result, or execute the request again. The API contract defines parameter normalization and comparison.
 
-在幂等记录仍有效、服务端实现正确的前提下，重试 `K-A` 且参数一致，会命中已完成记录，获得同一任务 `ARC-17` 的已保存结果，而不是创建新任务。这里复用的是业务结果，不要求所有传输头或响应字节逐字节一致。如果服务端仍在处理原操作，应返回可识别的处理中状态，或按接口约定等待；客户端通过查询或退避重试确认结果，不启动第二份工作。退避用于减少请求压力，本身不提供去重保证。
+The processing rules are:
 
-如果客户端因超时改用 `K-B`，服务器的幂等机制会把它视为新操作，可能又创建 `ARC-18`；这对新键的语义是正确的，却不符合用户“只创建一个任务”的原意。业务唯一约束可能另行拦截，但那不是幂等键本身提供的保证。只有用户确实要再创建一个任务时，新键才符合意图。
-
-服务端应在约定的作用域内查找和保存幂等记录，例如租户与接口范围，而不是把键当作全局身份或访问凭证。请求必须先完成身份验证、权限与参数校验。记录通常包含作用域、键、规范化后的关键参数摘要、处理状态，以及已完成的业务结果或稳定结果引用。同键不同参数必须拒绝，并明确提示冲突；不能覆盖原记录、悄悄复用不匹配的结果或重新执行。参数规范化与比较规则由接口契约明确。
-
-处理规则如下：
-
-| 记录情况 | 参数情况 | 服务端行为 |
+| Record state | Parameters | Server behavior |
 | --- | --- | --- |
-| 有效记录不存在 | 请求合法 | 原子占用键，再执行；不能仅凭一次普通查询就直接开工 |
-| 有效记录为处理中 | 一致 | 返回处理中或按约定等待，不重复执行 |
-| 有效记录已完成 | 一致 | 返回保存的业务结果或稳定引用 |
-| 有效记录存在 | 不一致 | 拒绝参数冲突，不执行新操作 |
-| 记录已过期或清理 | 无法依原记录确认 | 原幂等保证不再成立，先核对业务状态再决定恢复路径 |
+| No valid record exists | Request is valid | Atomically claim the key, then execute. A single ordinary lookup is not enough to safely start work. |
+| Valid record is in progress | Match | Return an identifiable in-progress state or wait as specified; do not execute again. |
+| Valid record is complete | Match | Return the saved business result or a stable reference. |
+| Valid record exists | Differ | Reject the parameter conflict; do not execute a new operation. |
+| Record expired or was deleted | Cannot be confirmed from the record | The original idempotency guarantee no longer holds. Check business state before choosing a recovery path. |
 
-幂等保证不是客户端多带一个字段就自动成立，而是依赖服务端的持久记录、并发控制、原子性与保留期。并发请求不能都在“查询无记录”之后各自执行，应通过唯一约束、事务或等效原子占用机制，使同一个有效键只有一个执行者。业务提交与结果记录还需保持一致，否则可能出现“业务已成功、记录未写入”的崩溃窗口。示例可将创建任务与完成记录放在同一事务中；若涉及跨系统副作用，不能假设本地事务覆盖远端动作，需要下游幂等、事务消息或对账等配套机制。仅使用锁或缓存并不自动消除这些问题。
+Idempotency is not created automatically by adding a field to a client request. It depends on durable server records, concurrency control, atomicity, and a retention period. Concurrent requests must not each execute after independently observing “no record”; a unique constraint, transaction, or equivalent atomic claim must ensure that only one worker owns a given valid key. The business commit and result record must also stay consistent, or a crash can leave the business operation successful while its record is missing. In this example, task creation and its completion record could share one transaction. For side effects across systems, a local transaction cannot cover remote actions; downstream idempotency, transactional messaging, reconciliation, or equivalent mechanisms are needed. A lock or cache alone does not solve these problems.
 
-记录需要明确保留期，并与客户端的重试窗口协调。记录过期、丢失或被清理后，同一个键再次到达可能被当成新请求，不能把幂等键说成“永久去重”，也不能宣称跨系统无条件 exactly-once。遇到超过保留期的超时操作，应通过业务标识查询状态或走约定的对账与恢复路径，而不是盲目换键或继续重试。失败、回滚与可重试错误如何记录及是否允许重新执行，也必须由接口契约明确；不能把所有失败统一当成“从未执行”。
+The record must have an explicit retention period coordinated with the client's retry window. After a record expires, is lost, or is deleted, the same key may be treated as a new request. Do not describe the key as providing “permanent deduplication” or unconditional exactly-once behavior across systems. For a timed-out operation past the retention window, query by a business identifier or follow the documented reconciliation and recovery procedure instead of blindly changing keys or continuing retries. The API contract must also define how failures, rollbacks, and retryable errors are recorded and when re-execution is allowed; not every failure means “nothing happened.”
 
-客户端最重要的行动顺序是：首次提交前保存键及对应参数；超时后先将状态理解为未知；在接口约定的重试窗口内，同一业务操作复用原键原参数，按契约查询或退避重试；只有明确的新业务意图才生成新键。服务端则必须落实参数冲突拒绝、原子占用、业务与记录一致性，以及明确的记录保留与恢复规则。
+The client's safest sequence is: save the key and its parameters before the first submission; treat a timeout as an unknown result; within the documented retry window, reuse that key and those parameters for the same business operation, querying or retrying with backoff as the API specifies; generate a new key only for an explicitly new business intent. The server must reject parameter conflicts, claim keys atomically, keep business commits and records consistent, and define retention and recovery rules.
 
-一句话总结：重试重复的是发送，不应重复业务意图。超时不等于未执行；同一业务操作用同一个键，新操作使用新键；保证成立的范围由服务端记录、原子性和保留期共同决定。
+In short: retries repeat the transmission, not the business intent. A timeout does not mean the operation did not run. Reuse the key for the same operation and use a new key for a new one; the guarantee depends on server records, atomicity, and retention.
 
-## 网页制作要求
+## Page authoring brief
 
-把上述复杂回答变成可读的网页，而不是逐段照搬。使用编辑式浅色紫罗兰布局，以请求与回执的关系图解释“执行成功但客户端超时”，用对照解释同键重试与换键新建；完整保留处理规则和保证边界。品牌为纯文本 VibeView.，正文中文，桌面参考宽度 1280px，补简单小屏样式。不使用 JavaScript、外部字体或图片，不虚构量化收益，显式标示全部业务情节为虚构。
+Turn the answer above into a readable webpage rather than copying it paragraph by paragraph. Use an editorial, light-violet layout. Explain “the operation succeeded but the client timed out” with a request-and-receipt sequence diagram. Compare retrying with the same key against creating a new operation with a new key. Preserve the complete processing rules and the limits of the guarantee. Use a text-only `VibeView.` brand, English body copy, a desktop reference width of 1280px, and a simple narrow-screen layout. Use no JavaScript, external fonts, or images. Do not invent quantitative benefits. Explicitly identify the entire business scenario as fictional.
 
-## 可复现构建
+## Reproducible build
 
-这份 Markdown 是语义来源，`reading-map.fragment.html` 是依此编写的视觉正文。`compose.py` 组装 HTML 片段，不直接解析 Markdown。最终页面使用发布副本中 version 为 1.5.1 的 `SKILL.md` 及同目录原样脚本、内嵌样式构建。
+This Markdown file is the semantic source; `reading-map.fragment.html` is the visual body authored from it. `compose.py` assembles HTML fragments and does not parse Markdown. The final page is built with the release's 1.5.2 `SKILL.md`, scripts, and embedded styles from the same directory.
 
-在 vibeview 目录运行以下命令；`docs` 目录须已存在，`docs/index.html` 必须尚不存在，组装器不会覆盖已有输出。`-B` 禁止生成 Python 字节码缓存。
+Run the following from the `vibeview` directory. The `docs` directory must exist and `docs/index.html` must not; the composer never overwrites an existing output. `-B` prevents Python bytecode cache files.
 
-```sh
-python3 -B scripts/compose.py examples/reading-map.fragment.html docs/index.html --title '超时之后，别把同一件事做两遍' --theme violet
+```bash
+python3 -B scripts/compose.py examples/reading-map.fragment.html docs/index.html --title 'After a timeout, don’t do the same thing twice' --theme violet
 ```
 
-组装器自动在 HTML 的 title 前加上 `VibeView ·`；正文主标题保持“超时之后，别把同一件事做两遍”。构建不启动浏览器，也不发布网页。
+The composer prefixes the HTML title with `VibeView ·`; the body heading is “After a timeout, don’t do the same thing twice.” Building does not launch a browser or publish a webpage.

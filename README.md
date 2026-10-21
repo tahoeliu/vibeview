@@ -1,164 +1,164 @@
 <div align="center">
 
-# VibeView.
+# VibeView
 
-### 别让好答案，埋在聊天记录里。
+### Turn long AI answers into visual explanations people want to read.
 
-把 AI 对话、复杂分析与长篇内容，变成愿意读下去的可视化网页。
+An open-source Agent Skill that transforms the context and results already in your conversation into a polished, standalone HTML page.
 
-**一个 Agent Skill · 一句 `vv` · 一份独立 HTML**
+**One Skill · `vv` in your conversation · One portable HTML file**
 
-[看真实效果](#先看效果) · [安装使用](#安装使用) · [直接运行示例](#不接-agent也能先看效果) · [能力边界](#先说清楚边界)
+[See the real output](#see-it-in-action) · [Install the skill](#install) · [Build the example](#build-the-example-without-an-agent) · [Understand the limits](#scope-and-limitations) · [Chinese](README.zh-CN.md)
 
 </div>
 
-![VibeView 1.5.2 实际输出：通过请求时序图解释超时、重试与幂等键](docs/preview.png)
+![VibeView 1.5.2 output: a request sequence diagram explains timeouts, retries, and idempotency keys](docs/preview.png)
 
-> 上图是本仓库 **1.5.2 组装器的实际输出截图**，不是界面概念图。内容为虚构工程教学示例；视觉正文由 Agent 创作，Python 负责组装。不同模型、材料与提示会产生不同效果。
+> This is a screenshot of output built with this repository's 1.5.2 composer, not a mockup. The engineering scenario is fictional. An Agent authored the visual content; Python assembled the page. Results vary by model, source material, and prompt.
 
-## 从“回答了”到“看懂了”
+## From “answered” to “understood”
 
-AI 能写很长的答案。但真正难读的，往往不是文字不够，而是关系藏在文字里：哪个方案适合谁？一次失败会影响什么？结论依赖哪些条件？
+AI can produce a long answer. The hard part is often not missing text; it is the relationships buried inside it. Which option fits which situation? What does one failure affect? Which assumptions support the conclusion?
 
-VibeView 给 Agent 一套视觉表达约定和轻量构建工具：**先选最值得看懂的关系，再为内容设计画面。** 不是给每段文字套一张卡片，也不是把重要细节折叠起来。
+VibeView gives an Agent visual storytelling guidance and a lightweight HTML builder. **Start with the relationship the reader most needs to understand, then design the visual around the content.** It does not put every paragraph in a generic card or hide important details behind tabs.
 
 ```text
-vv 总结刚才的分析，让我看懂关键结论和依据
+vv summarize the analysis so far and make the key conclusion and evidence clear
 
-vv 把这两个方案的差异、适用条件和代价画清楚
+vv show how these two options differ, when each fits, and what each costs
 
-vv 解释刚才讨论的重试机制，保留失败路径和边界
+vv explain the retry mechanism we discussed, including failure paths and limits
 ```
 
-`vv` 是在支持 Skill 的 Agent 对话里使用的自然语言约定，**不是终端命令**。
+Type `vv` in a conversation with an Agent that supports local Skills. **It is a natural-language convention, not a terminal command.**
 
-## 先看效果
+## See it in action
 
-这个例子只回答一个问题：**客户端超时后，为什么不能随便换一个键重试？**
+The example answers one question: **After a client timeout, why shouldn’t you retry with a new key?**
 
-| 原本藏在段落里的内容 | VibeView 如何表达 |
+| What was buried in prose | How VibeView makes it visible |
 | --- | --- |
-| 请求成功，但回执没有到达 | 用请求时序图区分服务端状态和客户端认知 |
-| 同一次操作与另一次操作 | 用两组并列关系图展示“合流”与“分开” |
-| 同键不同参数、处理中、记录过期 | 保留完整规则表，不把边界藏在图后面 |
-| 幂等不是无条件只执行一次 | 单独展开并发、原子性和保留期三个条件 |
+| A request succeeded, but its receipt never arrived | A sequence diagram separates server state from what the client knows |
+| A retry of the same operation versus a genuinely new operation | Side-by-side relationship diagrams show when requests converge and when they stay separate |
+| A key reused with different parameters, an in-progress request, and an expired record | The complete rules table keeps the edge cases visible |
+| Idempotency is not an unconditional promise to execute only once | Concurrency, atomicity, and retention are explained as separate requirements |
 
-**[查看原始材料](examples/reading-map.input.md) → [查看视觉正文](examples/reading-map.fragment.html) → [下载 HTML](docs/index.html)**
+**[Read the source material](examples/reading-map.input.md) → [Explore the visual page](examples/reading-map.fragment.html) → [Download the standalone HTML](docs/index.html)**
 
-GitHub 文件页只显示 HTML 源码；下载后用浏览器打开，或按照下方命令在本机生成。当前没有宣称已上线的托管 Demo。
+GitHub renders the HTML file as source. Download it and open it in a browser, or build it locally with the command below. There is no hosted live demo advertised here.
 
-## 为什么是一个 Skill？
+## Why an Agent Skill?
 
-你已经在和 Agent 讨论问题，结果也已经在对话里。没必要为了看清这些内容，再搬去另一款编辑器从头排版。
+You are already discussing the problem with an Agent, and the answer is already in the conversation. VibeView helps make that answer easier to understand without moving it to another editor and laying it out again.
 
-- **继续当前对话。** 使用已有指令、上下文和结果，不默认重复研究或先写第二份报告。
-- **让关系可见。** Agent 创作主题图形、对照与阅读层次；样式原语不强制整页布局。
-- **重点突出，细节常显。** 完整说明、表格与必要来源在同一页展开。
-- **交付一个文件。** 组装器内嵌样式；默认无 JavaScript、远程字体或运行服务。
-- **少一点重复工程。** 复用品牌外壳、排版与视觉基础，把设计投入留给实际内容。
+- **Continue the current conversation.** Use the existing instructions, context, and results; do not repeat research or write a second report by default.
+- **Make relationships visible.** The Agent creates subject-specific diagrams, comparisons, and reading hierarchy. The design primitives do not impose a page layout.
+- **Emphasize the key idea while keeping details in view.** Explanations, tables, and relevant sources can appear together on one page.
+- **Deliver one portable file.** The composer embeds styles. The default output needs no JavaScript, remote fonts, or server.
+- **Spend effort on the content.** Reuse the brand shell, typography, and visual primitives so design effort goes into the explanation itself.
 
-**适合**：解释技术机制、对比方案、复盘过程、整理已经得到的分析结果。
+**Good for:** explaining technical mechanisms, comparing options, reviewing a process, and presenting analysis already completed.
 
-**不适合**：实时业务系统、交互式数据看板、像素级固定模板、需要自动事实核验的研究任务。短问题也不必生成网页。
+**Not intended for:** live business systems, interactive dashboards, rigid pixel-perfect templates, or research that requires automatic fact-checking. Short answers do not need a webpage.
 
-## 安装使用
+## Install
 
-### 需要什么
+### Requirements
 
-- 能加载本地 `SKILL.md` 并运行本地脚本的 Agent 宿主；本项目以 **WorkBuddy** 为使用环境。
-- Python 3；本次验证环境为 Python 3.13.12 / macOS。脚本只用标准库，无须 `pip install`。
-- Git，用于下面的安装命令；也可以下载 ZIP 后手动放入技能目录。
+- An Agent host that can load a local `SKILL.md` and run local scripts. This project was built for **WorkBuddy**.
+- Python 3. The validation environment for this release was Python 3.13.12 on macOS. The scripts use only the standard library; no `pip install` is needed.
+- Git for the command below. You can also download the ZIP and copy it into the Skills directory manually.
 
-### 安装到 WorkBuddy
+### Install in WorkBuddy
 
-在 macOS / Linux 终端执行：
+Run this in a macOS or Linux terminal:
 
 ```bash
 git clone https://github.com/tahoeliu/vibeview.git "$HOME/.workbuddy/skills/vibeview"
 ```
 
-目标目录必须不存在；不要覆盖已有安装。你也可以在已配置 SSH 时使用仓库的 SSH 克隆地址。
+The destination directory must not already exist; do not overwrite an existing installation. If SSH is configured, you can use the repository's SSH clone URL instead.
 
-> **已有 VibeView / VibePreview / TahoeView？** 先在宿主中确认旧 Skill 的实际目录。本项目作者的旧安装目录名为 `tahoeview`，Skill 名称已是 `vibeview`。不要把新旧副本同时加载；先备份并停用旧版，再安装。上面的命令不会自动迁移或删除旧版。
+> **Already using VibeView, VibePreview, or TahoeView?** First locate the old Skill in your host. The author's former installation directory was named `tahoeview`, while the Skill itself was already named `vibeview`. Do not load both copies at once. Back up and disable the old copy before installing this one. The command above does not migrate or remove an older version.
 
-让 WorkBuddy 重新加载本地技能；若尚未识别，可重启应用或新开会话。然后在对话里输入：
+Ask WorkBuddy to reload local Skills. If it does not recognize the Skill, restart the app or start a new session. Then try:
 
 ```text
-vv 用网页解释为什么超时重试可能产生重复操作，保留并发和过期边界
+vv explain how a timeout retry can create a duplicate operation, including concurrency and expiration limits
 ```
 
-Agent 会根据材料创作 HTML/SVG，调用本地工具生成页面。输出位置和预览方式由宿主及当前任务决定。
+The Agent authors HTML/SVG from the available material and invokes the local builder. The host and task determine where the result is saved and how it is previewed.
 
-其他支持本地 Skill 的宿主可尝试加载整个文件夹，但**尚未逐一验证兼容性**。只复制 `SKILL.md` 不够，必须保留 `scripts/`、`assets/` 和 `references/`。
+Other hosts that support local Skills may be able to load this folder, but compatibility has not been verified host by host. Copying `SKILL.md` alone is not sufficient; keep `scripts/`, `assets/`, and `references/` alongside it.
 
-## 不接 Agent，也能先看效果
+## Build the example without an Agent
 
-在一个独立目录克隆项目后：
+Clone the project into a new directory, then run:
 
 ```bash
 git clone https://github.com/tahoeliu/vibeview.git
 cd vibeview
 python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html \
-  --title "超时之后，别把同一件事做两遍" --theme violet
+  --title "After a timeout, don't do the same thing twice" --theme violet
 ```
 
-用浏览器打开生成的 `preview.html`。macOS 可执行：
+Open `preview.html` in a browser. On macOS:
 
 ```bash
 open preview.html
 ```
 
-**再次运行请换一个输出文件名。** 工具拒绝覆盖已有文件；输出的父目录必须已存在。
+**Choose a new output filename each time.** The tool refuses to overwrite an existing file, and the output directory must already exist.
 
-这条命令复现的是已经创作好的示例，**不是让 Python 从 Markdown 自动生成图解**。生成新的视觉内容需要 Agent，或者你自己编写 HTML 片段。
+This reproduces the pre-authored example; **Python does not turn Markdown into diagrams.** To create new visual content, use an Agent or write an HTML fragment yourself.
 
-## 它如何工作
+## How it works
 
 ```text
-你的指令 + 对话中已有的内容
-             ↓
-Agent 确定重点、创作 HTML / SVG 和差量 CSS
-             ↓
-compose.py：检查片段 + 内嵌基础样式 + 加入品牌外壳
-             ↓
-一个新的 HTML 文件 → 浏览器阅读
+Your instruction + material already in the conversation
+                         ↓
+Agent identifies the point and authors HTML / SVG plus optional CSS
+                         ↓
+compose.py checks the fragment, embeds base styles, and adds the brand shell
+                         ↓
+One new HTML file → read it in a browser
 ```
 
-默认路径不规定页面模板。四种基础主题为 `violet`、`blue`、`sage`、`amber`；也可覆盖样式，或通过 `--bare` 只复用品牌外壳。
+The default path does not prescribe a page template. Four base themes are available: `violet`, `blue`, `sage`, and `amber`. You can override styles or use `--bare` to keep only the brand shell.
 
 ```bash
 python3 -B scripts/compose.py your-fragment.html your-page.html \
-  --title "你的主题" --theme sage
+  --title "Your topic" --theme sage
 ```
 
-片段必须有自己的 `<h1>`，不包含整页 `html/head/body/main/header/footer` 包装。只用于你或 Agent **新创作且可信的内容**。
+The fragment must include its own `<h1>` and must not include full-page `html/head/body/main/header/footer` wrappers. Use it only for trusted content you or an Agent have newly authored.
 
-规则化的并列内容还可以使用 [JSON 组件路径](references/template.md)。它是备选，不是默认构图方式。
+Regular, structured comparisons can also use the [JSON component path](references/template.md). It is an option, not the default way to compose a page.
 
-## 先说清楚边界
+## Scope and limitations
 
-| 边界 | 含义 |
+| Boundary | What it means |
 | --- | --- |
-| 桌面阅读优先 | 示例补充了窄屏布局，不代表 Skill 已全面适配所有移动设备 |
-| 不是 Markdown 解析器 | 1.5.2 的 `compose.py` 接收 HTML 片段；Markdown 可作为 Agent 的输入材料 |
-| 不是 HTML 安全净化器 | 静态检查不能把任意外部 HTML 变安全；不要直接喂入不可信网页 |
-| 本地构建不联网 ≠ 整条链路离线 | Agent 的模型请求取决于宿主；敏感材料遵循你的模型和隐私设置 |
-| 图解不是事实核验 | 数据、来源、假设和结论仍需核对；不能用示意图制造证据 |
-| 分享文件 ≠ 自动部署 | 本工具生成本地 HTML；上传或托管需要单独授权，分享前检查敏感内容 |
-| 效果取决于创作 | 没有“每次都一样好看”的保证，也没有未经测量的提速百分比 |
+| Desktop-first reading | The example includes a narrow-screen layout; that does not mean the Skill is fully adapted to every mobile device. |
+| Not a Markdown parser | In version 1.5.2, `compose.py` accepts an HTML fragment. Markdown may be input material for the Agent. |
+| Not an HTML sanitizer | Static checks cannot make arbitrary external HTML safe. Do not pass untrusted webpages directly to the composer. |
+| Local build does not mean the whole workflow is offline | Model requests depend on the Agent host. Handle sensitive material according to your model and privacy settings. |
+| Diagrams are not fact-checking | Check data, sources, assumptions, and conclusions. A diagram must not be used to manufacture evidence. |
+| A file is not a deployment | This tool creates a local HTML file. Uploading or hosting it requires a separate action; check for sensitive content before sharing. |
+| Results depend on authorship | There is no guarantee that every page will look equally good and no unmeasured speedup claim. |
 
-## 版本与反馈
+## Release and feedback
 
-当前版本：**1.5.2**，基于作者已安装的 1.5.1 稳定版做最小修复，**未混入 1.7.0 或 Next 实验代码**。
+Current release: **1.5.2**, a minimal fix on the author's installed 1.5.1 stable version. It does **not** include 1.7.0 or experimental Next code.
 
-本次修复：用实际 HTML 标题替代文本匹配；补齐 CSS/SVG 本地引用校验；输出已生成但临时文件清理失败时，返回成功并附带明确警告。异常时仍可能留下临时文件，请按警告路径检查处理，不要修改与成品共享内容的暂存文件。
+This release uses the actual HTML title instead of text matching, checks local CSS/SVG references, and reports success with a clear warning if the output was created but temporary-file cleanup failed. An exception may still leave a temporary file; inspect the path in the warning and do not modify a staging file that shares content with the finished output.
 
-在 Python 3.13.12 / macOS 上完成 100 项隔离回归，包括主题组合、输入边界、并发冲突与故障注入；这不代表跨平台、长期运行或任意不可信 HTML 安全性保证。
+The release completed 100 isolated regression cases on Python 3.13.12 / macOS, covering theme combinations, input boundaries, concurrent conflicts, and fault injection. This is not a guarantee of cross-platform behavior, long-running reliability, or safety for arbitrary untrusted HTML.
 
-如果你遇到输出错误，请在 [Issues](https://github.com/tahoeliu/vibeview/issues) 提供：版本、Python/系统版本、命令、错误信息，以及可公开的最小复现材料。不要上传密钥、Token 或业务机密。
+If you encounter an output error, open an [issue](https://github.com/tahoeliu/vibeview/issues) with the version, Python and OS versions, command, error message, and a minimal reproducible example you can share publicly. Do not upload keys, tokens, or business-confidential material.
 
-欢迎贡献更清楚的图解示例、文档改进和可复现的问题。若这个项目帮你把一个难懂的问题讲清楚了，欢迎 Star，或分享那份经过脱敏的作品。
+Contributions that improve diagram examples, documentation, or reproducible bug reports are welcome. If VibeView helped you explain a difficult topic, consider starring the project or sharing a sanitized example.
 
-## 许可证
+## License
 
-[MIT](LICENSE) © 2026 tahoeliu。
+[MIT](LICENSE) © 2026 tahoeliu.

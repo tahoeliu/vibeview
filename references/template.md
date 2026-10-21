@@ -1,20 +1,20 @@
-# 条件适用的JSON组件路径
+# Conditional JSON component path
 
-仅在内容规整、组件完整准确、版式不单调且品质不降低时使用。不要因为能够塞入字段就使用模板；不必先尝试模板。非适配内容走自主compose.py或完整HTML。
+Use this path only when the content is regular, the components can express it fully and accurately, and the resulting layout will not be monotonous or lower quality. Do not use a template just because the fields can contain the content; no template trial is required. For unsuitable material, compose freely with `compose.py` or write complete HTML.
 
-`python <技能目录>/scripts/render.py <内容.json> <新的输出.html>`
+`python <skill-directory>/scripts/render.py <content.json> <new-output.html>`
 
-顶层title、可选subtitle/meta/theme（blue/sage/amber/violet）、blocks数组。块通用type、title、text（字符串或段落数组）、note、variant（plain/tinted）、columns（1–4）。所有普通字段都是纯文本。
+Top-level fields: `title`, optional `subtitle`, `meta`, `language` (`en` by default or `zh-CN`), `theme` (`blue` / `sage` / `amber` / `violet`), and a `blocks` array. Blocks share `type`, `title`, `text` (string or paragraph array), `note`, `variant` (`plain` / `tinted`), and `columns` (1–4). Ordinary fields are plain text.
 
-- prose/callout：text。
-- compare：items中title/text，可选label。
-- metrics：items中value/title/text。
-- flow/timeline：items中title/text，可选label。
-- findings：items中title/text，可选label/action/source。
-- bars：items中title/非负value，可选unit；只支持零基准线性条，不支持负数或堆叠。
-- sources：items中title/text/url；url为无凭据http(s)。
-- custom：html为受限静态HTML/SVG，不允许style、脚本、事件或外部资源；SVG id以custom-开头且全页唯一。
+- `prose` / `callout`: `text`.
+- `compare`: `items` with `title` / `text`, optional `label`.
+- `metrics`: `items` with `value` / `title` / `text`.
+- `flow` / `timeline`: `items` with `title` / `text`, optional `label`.
+- `findings`: `items` with `title` / `text`, optional `label` / `action` / `source`.
+- `bars`: `items` with `title` / nonnegative `value`, optional `unit`; zero-based linear bars only, no negative values or stacking.
+- `sources`: `items` with `title` / `text` / `url`; URLs must be credential-free HTTP(S).
+- `custom`: `html` is a restricted static HTML/SVG subset; no `style`, scripts, events, or external resources. SVG ids must start with `custom-` and be unique on the page.
 
-例：{"title":"两种选择","theme":"blue","blocks":[{"type":"compare","items":[{"title":"A","text":"依据"},{"title":"B","text":"代价"}]}]}
+Example: `{"title":"Two options","theme":"blue","blocks":[{"type":"compare","items":[{"title":"A","text":"Evidence"},{"title":"B","text":"Trade-off"}]}]}`
 
-脚本只负责机械组装，不推导数据含义、不验证业务结论。输出父目录需已存在且文件不存在；组装已检查，不再启动独立检查流程。
+The script mechanically assembles pages. It does not infer the meaning of data or validate business conclusions. The output directory must exist and the output file must not. Assembly checks are included; do not launch a separate check workflow.

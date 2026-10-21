@@ -120,7 +120,7 @@ def compose(fragment, title, theme='violet', kit=True):
         base = (Path(__file__).resolve().parent.parent / 'assets/design.css').read_text(encoding='utf-8')
     else:
         base = 'body{margin:0;color:#252535;background:#fafafa;font-family:system-ui,sans-serif}.vv-brandbar{padding:22px 40px;border-bottom:1px solid #ddd}.vv-brandbar a{color:inherit;text-decoration:none;font-size:25px;font-weight:700}.vv-footer{padding:24px 40px;font-size:12px;color:#667}'
-    page = '<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main">' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">VibeView · 可视化阅读</div></footer></body></html>'
+    page = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main">' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">VibeView · Visual reading</div></footer></body></html>'
     return page, list(dict.fromkeys(check.warnings))
 
 def main():
@@ -130,6 +130,7 @@ def main():
     parser.add_argument('--title', required=True)
     parser.add_argument('--theme', choices=('violet', 'blue', 'sage', 'amber'), default='violet')
     parser.add_argument('--bare', action='store_true', help='Only brand shell; no design kit')
+    parser.add_argument('--lang', choices=('en', 'zh-CN'), default='en', help='Language metadata and shell copy (default: en)')
     args = parser.parse_args()
     start = time.perf_counter()
     try:
@@ -141,6 +142,8 @@ def main():
         if len(raw) > LIMIT:
             raise ValueError('Input exceeds 4 MiB')
         page, warnings = compose(raw.decode('utf-8-sig'), args.title, args.theme, not args.bare)
+        if args.lang == 'zh-CN':
+            page = page.replace('<html lang="en">', '<html lang="zh-CN">')
         out = write_new(args.output, page, warnings)
         print(json.dumps({'status': 'ok', 'file': str(out), 'input_bytes': len(raw), 'output_bytes': len(page.encode()), 'elapsed_ms': round((time.perf_counter()-start)*1000, 2), 'warnings': warnings, 'scope': 'Static checks for agent-authored fragments, not a sanitizer or visual review'}, ensure_ascii=False))
         return 0
