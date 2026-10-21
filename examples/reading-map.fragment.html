@@ -17,18 +17,18 @@
 </style>
 <div class="vv-wrap">
 <section class="rm-intro" aria-labelledby="reading-title">
-  <div class="rm-eyebrow"><strong>Turn complex answers into readable webpages</strong><span>Engineering explainer · VibeView 1.5.2</span></div>
+  <div class="rm-eyebrow"><strong>A visual guide to safe API retries</strong><span>Engineering explainer · VibeView 1.5.2</span></div>
   <div class="rm-hero">
-    <div><h1 id="reading-title">After a timeout,<br><span>don’t do the same thing twice</span></h1><p class="rm-deck">Why can a retry create a duplicate operation? The key is not “send it again,” but helping the server recognize whether this is a <strong>retry of the same operation</strong> or <strong>a new one</strong>.</p></div>
-    <aside class="rm-margin"><strong>Entirely fictional engineering scenario</strong><p>The “Paperboat Archive Service,” endpoint, keys, and task IDs are teaching examples, not a real product or incident.</p><p>This explains a mechanism; it makes no measured-benefit claim.</p></aside>
+    <div><h1 id="reading-title">Retry the request.<br><span>Reuse the result.</span></h1><p class="rm-deck">The server may finish the work before the client times out. An idempotency key lets a retry find the <strong>original operation</strong> instead of starting a second one, within the API’s documented retry window.</p></div>
+    <aside class="rm-margin"><strong>One operation, one key.</strong><p>Reuse the original key and parameters while the record is valid.</p><p>Use a new key when you intend to start a new operation.</p></aside>
   </div>
 </section>
 <figure class="rm-figure" aria-labelledby="sequence-title">
-  <div class="rm-figure-top"><h2 id="sequence-title">The work finished. The receipt never arrived.</h2><p>Same business operation · Same parameters · Within the retention window</p></div>
+  <div class="rm-figure-top"><h2 id="sequence-title">The work finished. The response never arrived.</h2><p>Same operation · Same parameters · Valid record</p></div>
   <div class="rm-diagram-scroll">
   <svg class="rm-diagram" viewBox="0 0 1090 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flow-title flow-desc">
     <title id="flow-title">After a client timeout, retry with the same idempotency key and retrieve the original task result</title>
-    <desc id="flow-desc">Time flows downward. The client submits an archive request with K-A. The server atomically claims the key, creates ARC-17, and saves the result. The first success receipt is lost or delayed, so the client times out. The client retries with K-A and the same parameters; the valid record returns the original ARC-17 result without creating another task. This diagram assumes the server record and business commit stay consistent.</desc>
+    <desc id="flow-desc">Time flows downward. The client submits an archive request with K-A. The server atomically claims the key, creates ARC-17, and saves the result. The first response is lost or delayed, so the client times out. The client retries with K-A and the same parameters; the valid record returns the original ARC-17 result without creating another task. This diagram assumes the server record and business commit stay consistent.</desc>
     <defs>
       <marker id="arrow-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#7041b5"></path></marker>
       <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#326f62"></path></marker>
@@ -36,7 +36,7 @@
     <rect x="782" y="66" width="286" height="344" rx="6" fill="#e8def3"></rect>
     <text x="145" y="34" text-anchor="middle" font-size="18" font-weight="650" fill="#292139">Client</text>
     <text x="682" y="34" text-anchor="middle" font-size="18" font-weight="650" fill="#292139">Archive service</text>
-    <text x="805" y="95" font-size="12" fill="#6d657b" letter-spacing="2">The server remembers the operation</text>
+    <text x="805" y="95" font-size="12" fill="#6d657b" letter-spacing=".8">One durable operation record</text>
     <line x1="145" y1="56" x2="145" y2="425" stroke="#c7b6dc" stroke-width="2"></line>
     <line x1="682" y1="56" x2="682" y2="425" stroke="#c7b6dc" stroke-width="2"></line>
     <line x1="32" y1="87" x2="32" y2="400" stroke="#d4c9e1"></line><path d="M28 394 L32 402 L36 394" fill="none" stroke="#aaa0b9"></path>
@@ -50,30 +50,30 @@
     <text x="805" y="242" font-size="12" fill="#6d657b">Result</text><text x="1042" y="242" text-anchor="end" font-size="16" font-weight="650" fill="#326f62">ARC-17 · Complete</text>
     <text x="715" y="183" font-size="11" fill="#7041b5" text-anchor="middle"><tspan x="733" dy="0">Atomically claim</tspan><tspan x="733" dy="19">Execute operation</tspan><tspan x="733" dy="19">Save result</tspan></text>
     <line x1="676" y1="234" x2="330" y2="234" stroke="#a45441" stroke-width="2" stroke-dasharray="7 6"></line><path d="M299 225 L317 243 M317 225 L299 243" stroke="#a45441" stroke-width="2.5"></path>
-    <text x="346" y="218" font-size="13" fill="#a45441">Success receipt lost or delayed</text>
-    <rect x="81" y="220" width="128" height="40" rx="20" fill="#fcf0e9" stroke="#dbb4a7"></rect><text x="145" y="245" text-anchor="middle" font-size="15" font-weight="600" fill="#a45441">Timeout ≠ Not executed</text>
-    <text x="805" y="284" font-size="12" fill="#6d657b">State and record must stay in sync.</text><text x="805" y="307" font-size="12" fill="#6d657b">A crash must not erase the deduplication record.</text>
+    <text x="346" y="218" font-size="13" fill="#a45441">Response lost or delayed</text>
+    <rect x="81" y="220" width="128" height="40" rx="20" fill="#fcf0e9" stroke="#dbb4a7"></rect><text x="145" y="245" text-anchor="middle" font-size="15" font-weight="600" fill="#a45441">Result unknown</text>
+    <text x="805" y="284" font-size="12" fill="#6d657b">Commit the work and its record together.</text><text x="805" y="307" font-size="12" fill="#6d657b">Recover consistently after a crash.</text>
     <text x="195" y="295" font-size="13" font-weight="600" fill="#7041b5">Retry · Reuse K-A and the same parameters</text>
     <line x1="145" y1="315" x2="678" y2="315" stroke="#7041b5" stroke-width="3" marker-end="url(#arrow-violet)"></line><circle cx="145" cy="315" r="6" fill="#7041b5"></circle>
     <path d="M690 315 L766 315 L786 340" fill="none" stroke="#b29aca" stroke-width="1.5"></path>
     <rect x="805" y="331" width="237" height="51" rx="4" fill="#fff"></rect><text x="923" y="353" text-anchor="middle" font-size="13" font-weight="600" fill="#326f62">Match → Return original result</text><text x="923" y="372" text-anchor="middle" font-size="11" fill="#6d657b">No new task is created</text>
     <line x1="682" y1="386" x2="150" y2="386" stroke="#326f62" stroke-width="3" marker-end="url(#arrow-green)"></line><text x="356" y="370" font-size="14" fill="#326f62" font-weight="600">Return the saved ARC-17 result</text>
-    <text x="145" y="443" text-anchor="middle" font-size="12" fill="#326f62">Result received</text><text x="682" y="443" text-anchor="middle" font-size="12" fill="#326f62">Still the original task</text>
+    <text x="145" y="443" text-anchor="middle" font-size="12" fill="#326f62">Response received</text><text x="682" y="443" text-anchor="middle" font-size="12" fill="#326f62">Still the original task</text>
   </svg>
   </div>
-  <figcaption><span><strong>This diagram shows one case: success with no receipt received.</strong> A timeout can also happen before arrival or while work is still in progress.</span><span>Scroll the diagram horizontally on narrow screens</span></figcaption>
+  <figcaption><span><strong>Shown here: the operation succeeded, but the client received no response.</strong> A request can also time out before it arrives or while the server is still working.</span><span>Scroll the diagram horizontally on narrow screens</span></figcaption>
 </figure>
-<div class="rm-thesis"><span class="vv-kicker">One intuition to correct</span><p>A timeout means <strong>you do not know the result yet</strong>;<br>it is not the server’s “undo” button. <em>Sending again does not mean executing again.</em></p></div>
+<div class="rm-thesis"><span class="vv-kicker">The key distinction</span><p>A timeout means <strong>the result is unknown</strong>.<br><em>The work may already be done.</em></p></div>
 <section class="rm-section" aria-labelledby="identity-title">
-  <div class="rm-heading"><span class="vv-kicker">01 / Identify the business intent</span><div><h2 id="identity-title">The key follows “this operation,” not “this transmission.”</h2><p>For a create operation that is not naturally idempotent, treating every arrival as new can create duplicate tasks. An idempotency key maps repeated transmissions back to the same business intent.</p></div></div>
+  <div class="rm-heading"><span class="vv-kicker">01 / Identify the operation</span><div><h2 id="identity-title">Give each operation a key. Keep it for retries.</h2><p>Creating a task twice can produce two tasks. An idempotency key gives the server a way to recognize repeated attempts to perform the same operation.</p></div></div>
   <div class="rm-compare">
-    <article class="rm-case"><div class="rm-case-label">Same operation · Retry</div><h3>“Is the archive I just requested ready?”</h3>
+    <article class="rm-case"><div class="rm-case-label">Same operation · Retry</div><h3>“What happened to my archive request?”</h3>
       <svg class="rm-mini" viewBox="0 0 490 165" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The first K-A request and retry K-A converge on the same task, ARC-17">
         <path d="M144 45 C235 45 218 83 288 83 M144 121 C235 121 218 83 288 83" fill="none" stroke="#9671c5" stroke-width="2.5"></path><path d="M279 77 L290 83 L279 89" fill="none" stroke="#7041b5" stroke-width="2.5"></path>
         <rect x="0" y="22" width="144" height="47" rx="5" fill="#ede3fa"></rect><rect x="0" y="98" width="144" height="47" rx="5" fill="#ede3fa"></rect><text x="72" y="51" text-anchor="middle" font-size="15" fill="#7041b5">First · K-A</text><text x="72" y="127" text-anchor="middle" font-size="15" fill="#7041b5">Retry · K-A</text>
-        <path d="M312 45 L465 45 L482 62 L482 121 L312 121 Z" fill="#fff" stroke="#c6b6db"></path><path d="M465 45 L465 62 L482 62" fill="none" stroke="#c6b6db"></path><text x="397" y="77" text-anchor="middle" font-size="18" font-weight="600" fill="#292139">ARC-17</text><text x="397" y="103" text-anchor="middle" font-size="12" fill="#326f62">Reuse the same business result</text>
+        <path d="M312 45 L465 45 L482 62 L482 121 L312 121 Z" fill="#fff" stroke="#c6b6db"></path><path d="M465 45 L465 62 L482 62" fill="none" stroke="#c6b6db"></path><text x="397" y="77" text-anchor="middle" font-size="18" font-weight="600" fill="#292139">ARC-17</text><text x="397" y="103" text-anchor="middle" font-size="12" fill="#326f62">Return the original result</text>
       </svg>
-      <p>Save before the first submission <code>K-A</code> and its parameters. When the result is unknown, <strong>reuse the original key and parameters</strong>; if the valid record is complete, return its result.</p><p class="rm-case-note">If the original operation is still in progress: wait, query, or retry with backoff as the API specifies; <strong>do not start a second operation</strong>.</p>
+      <p>Save <code>K-A</code> and the request parameters before sending the first request. When the result is unknown, <strong>reuse the original key and parameters</strong>; if the valid record is complete, return its result.</p><p class="rm-case-note">If the original operation is still in progress: wait, query, or retry with backoff as the API specifies; <strong>do not start a second operation</strong>.</p>
     </article>
     <article class="rm-case"><div class="rm-case-label">New intent · New operation</div><h3>“I explicitly want to create another one.”</h3>
       <svg class="rm-mini" viewBox="0 0 490 165" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="K-A maps to ARC-17; new key K-B maps to a separate task, ARC-18">
@@ -81,42 +81,42 @@
         <rect x="0" y="22" width="144" height="47" rx="5" fill="#ede3fa"></rect><rect x="0" y="98" width="144" height="47" rx="5" fill="#ede3fa"></rect><text x="72" y="51" text-anchor="middle" font-size="15" fill="#7041b5">Original · K-A</text><text x="72" y="127" text-anchor="middle" font-size="15" fill="#7041b5">New operation · K-B</text>
         <rect x="312" y="22" width="170" height="47" fill="#fff" stroke="#c6b6db"></rect><rect x="312" y="98" width="170" height="47" fill="#fff" stroke="#c6b6db"></rect><text x="397" y="51" text-anchor="middle" font-size="18" font-weight="600" fill="#292139">ARC-17</text><text x="397" y="127" text-anchor="middle" font-size="18" font-weight="600" fill="#292139">ARC-18</text>
       </svg>
-      <p>Only an explicitly new business intent gets a new key <code>K-B</code>. <strong>The same parameters can still mean a different operation</strong>; do not merge requests based only on matching parameters.</p><p class="rm-case-note"><strong class="rm-caution">Do not change the key because of a timeout.</strong>A new key may create another task. A separate business uniqueness constraint would be a different layer of protection.</p>
+      <p>A new operation gets a new key <code>K-B</code>. <strong>Two intentional operations can have identical parameters</strong>; do not merge requests based only on matching parameters.</p><p class="rm-case-note"><strong class="rm-caution">Do not change the key because of a timeout.</strong>A new key may create another task. A separate business uniqueness constraint would be a different layer of protection.</p>
     </article>
   </div>
 </section>
 <section class="rm-section" aria-labelledby="contract-title">
-  <div class="rm-heading"><span class="vv-kicker">02 / How the server decides</span><div><h2 id="contract-title">Recognize the key, then check parameters and state.</h2><p>Validate identity, authorization, and parameters first, then look up a record in the defined scope. A key is not an access credential. Reject the same key with different parameters; do not overwrite the record or silently repeat the work.</p></div></div>
+  <div class="rm-heading"><span class="vv-kicker">02 / How the server decides</span><div><h2 id="contract-title">Check the key, the parameters, and the record.</h2><p>Authenticate the caller, check permissions, and validate the request before looking up the key in its defined scope. The key does not grant access. If the parameters differ from the stored request, reject the conflict.</p></div></div>
   <div class="rm-contract">
-    <table class="rm-table"><caption class="vv-note" style="text-align:left;margin-bottom:16px">Processing rules after arrival · The server contract governs</caption><thead><tr><th scope="col">Record state</th><th scope="col">Parameters</th><th scope="col">Server behavior</th></tr></thead><tbody>
+    <table class="rm-table"><caption class="vv-note" style="text-align:left;margin-bottom:16px">What the server does next depends on the API contract</caption><thead><tr><th scope="col">Record state</th><th scope="col">Parameters</th><th scope="col">Server behavior</th></tr></thead><tbody>
       <tr><td>No valid record</td><td>Valid request</td><td>Atomically claim the key, then execute. Do not start work just because a lookup found nothing.</td></tr>
-      <tr><td>In progress</td><td>Match</td><td>Return a recognizable in-progress state or wait as specified; do not execute again.</td></tr>
+      <tr><td>In progress</td><td>Match</td><td>Report that work is in progress, or wait as the API specifies. Do not start it again.</td></tr>
       <tr><td>Complete</td><td>Match</td><td>Return the saved business result or a stable reference.</td></tr>
       <tr><td>Valid record exists</td><td>Differ</td><td><strong class="rm-caution">Reject parameter conflict</strong>—do not overwrite, reuse a mismatched result, or execute a new operation.</td></tr>
       <tr><td>Expired or deleted</td><td>Cannot confirm</td><td>The original guarantee no longer holds. Check business state, then follow the defined recovery path.</td></tr>
     </tbody></table>
-    <aside class="rm-record"><h3>Anatomy of a record</h3><dl><div><dt>Scope</dt><dd>Tenant / endpoint</dd></div><div><dt>Key</dt><dd><code>K-A</code></dd></div><div><dt>Parameter summary</dt><dd>Normalized key parameters</dd></div><div><dt>Status</dt><dd>Complete</dd></div><div><dt>Result reference</dt><dd><code>ARC-17</code></dd></div><div><dt>Retention</dt><dd>Defined by the API</dd></div></dl><p>The key is a teaching placeholder; production keys must be unique enough within their scope. The contract must define parameter normalization and comparison.</p><p>The business result is reused; not every transport header or response byte has to match.</p></aside>
+    <aside class="rm-record"><h3>What the server stores</h3><dl><div><dt>Scope</dt><dd>Tenant / endpoint</dd></div><div><dt>Key</dt><dd><code>K-A</code></dd></div><div><dt>Parameter summary</dt><dd>Relevant normalized parameters</dd></div><div><dt>Status</dt><dd>Complete</dd></div><div><dt>Result reference</dt><dd><code>ARC-17</code></dd></div><div><dt>Retention</dt><dd>Defined by the API</dd></div></dl><p>K-A is a placeholder. Real keys must be sufficiently unique within their scope. The API contract must define how parameters are normalized and compared.</p><p>The operation’s result is reused. Response headers and other transport details do not have to be byte-for-byte identical.</p></aside>
   </div>
 </section>
 </div>
 <section class="rm-boundaries" aria-labelledby="boundary-title"><div class="vv-wrap">
-  <div class="rm-heading"><span class="vv-kicker">03 / Guarantees have limits</span><div><h2 id="boundary-title">A request header does not mean “execute exactly once forever.”</h2><p>Idempotency depends on server records, atomicity, and retention. The client sending a key is only the start of the protocol.</p></div></div>
+  <div class="rm-heading"><span class="vv-kicker">03 / Know the limits</span><div><h2 id="boundary-title">The key is only part of the guarantee.</h2><p>Safe retries depend on durable records, atomic operations, and a defined retention period. Sending a key is only the client’s part of the protocol.</p></div></div>
   <div class="rm-boundary-list">
-    <article class="rm-boundary"><span class="rm-number">I</span><h3>Under concurrency,<br>only one worker can execute</h3><p>Two requests can both observe “no record.” Use a <strong>unique constraint, transaction, or equivalent atomic claim</strong> to compete for the same valid key; an ordinary “check then write” is not enough to deduplicate.</p></article>
-    <article class="rm-boundary"><span class="rm-number">II</span><h3>The operation and record<br>cannot succeed separately</h3><p>Prevent the crash window where “the operation committed but the result record was not written.” Here, task creation and its completion record can share one transaction. Cross-system side effects need mechanisms such as <strong>downstream idempotency, transactional messaging, or reconciliation</strong>; a local transaction, lock, or cache does not automatically cover remote actions.</p></article>
+    <article class="rm-boundary"><span class="rm-number">I</span><h3>Concurrent requests<br>must claim the key atomically</h3><p>Two requests can both observe “no record.” Use a <strong>unique constraint, transaction, or equivalent atomic claim</strong> to compete for the same valid key; an ordinary “check then write” is not enough to deduplicate.</p></article>
+    <article class="rm-boundary"><span class="rm-number">II</span><h3>The work and its record<br>must stay consistent</h3><p>Prevent the crash window where “the operation committed but the result record was not written.” Here, task creation and its completion record can share one transaction. Cross-system side effects need mechanisms such as <strong>downstream idempotency, transactional messaging, or reconciliation</strong>; a local transaction, lock, or cache does not automatically cover remote actions.</p></article>
     <article class="rm-boundary"><span class="rm-number">III</span><h3>When a record expires,<br>the guarantee may expire too</h3><p>Coordinate the retention period with the retry window. After a record expires, is lost, or is deleted, the same key may be treated as a new request. <strong>Query by a business identifier or use reconciliation and recovery</strong>; do not blindly retry or change keys, and do not promise permanent deduplication or unconditional exactly-once behavior across systems.</p></article>
   </div>
 </div></section>
 <div class="vv-wrap">
 <section class="rm-ending" aria-labelledby="takeaway-title">
-  <div><div class="vv-kicker">Keep this rule</div><h2 id="takeaway-title">Retries repeat a transmission,<br><span class="vv-accent">not the business intent.</span></h2><p>The API contract must specify how failures, rollbacks, and retryable errors are recorded and when re-execution is allowed. Do not interpret every failure as “never executed.”</p><p>Backoff reduces request pressure, but <strong>backoff itself does not provide deduplication</strong>.</p></div>
+  <div><div class="vv-kicker">Put it into practice</div><h2 id="takeaway-title">One operation.<br><span class="vv-accent">The same key for every retry.</span></h2><p>The API contract must specify how failures, rollbacks, and retryable errors are recorded and when re-execution is allowed. Do not interpret every failure as “never executed.”</p><p>Backoff reduces request pressure, but <strong>backoff itself does not provide deduplication</strong>.</p></div>
   <ol class="rm-checklist"><li><span>Before first submission, save the idempotency key and its parameters.</span></li><li><span>On timeout, treat the result as “unknown.”</span></li><li><span>Within the defined window, reuse the original key and parameters for the same operation; query or retry with backoff as specified.</span></li><li><span>Generate a new key only for an explicitly new business intent.</span></li><li><span>After retention expires, check business state before recovery.</span></li></ol>
 </section>
 <section class="rm-source" aria-label="Example source and reproduction">
-  <p><strong>About this example</strong>　All business names, endpoints, parameters, keys, task IDs, and interactions here are fictional teaching examples. No real incident attribution, measured data, or quantitative benefit is claimed.</p>
-  <p><strong>From a complex answer to a reading page</strong>　The original question and complete answer are in <code>examples/reading-map.input.md</code>; the visual body is <code>examples/reading-map.fragment.html</code>. The page unfolds the request relationship, business-intent comparison, processing rules, and guarantee limits instead of splitting long text into small cards.</p>
-  <p><strong>Build method</strong>　Built with the VibeView 1.5.2 release <code>scripts/compose.py</code>; it embeds <code>assets/design.css</code>. The composer accepts HTML fragments and does not parse Markdown. Run the command below from the project root;  <code>docs</code> must exist and the destination file must not.</p>
-  <pre><code>python3 -B scripts/compose.py examples/reading-map.fragment.html docs/index.html --title 'After a timeout, don’t do the same thing twice' --theme violet</code></pre>
-  <div class="rm-footerline"><span>Static HTML / No JavaScript / No external fonts or images</span><span>Reproducible reading example · 1.5.2</span></div>
+  <p><strong>About this example</strong> — The service, endpoint, parameters, keys, and task IDs are fictional. This example illustrates a retry mechanism; it does not describe a production incident.</p>
+  <p><strong>From answer to visual guide</strong> — The original question and complete answer are in <code>examples/reading-map.input.md</code>; the visual body is <code>examples/reading-map.fragment.html</code>. The guide pairs the request sequence with a comparison of operations, the server’s decision rules, and the limits of the guarantee.</p>
+  <p><strong>Build this example</strong> — Built with the VibeView 1.5.2 release <code>scripts/compose.py</code>; it embeds <code>assets/design.css</code>. The composer accepts HTML fragments and does not parse Markdown. Run this command from the repository root. Choose a new output filename; the composer will not overwrite an existing file.</p>
+  <pre><code>python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html --title 'Retry the request. Reuse the result.' --theme violet</code></pre>
+  <div class="rm-footerline"><span>Static HTML / No JavaScript / No external fonts or images</span><span>Built with VibeView 1.5.2</span></div>
 </section>
 </div>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 290" role="img" aria-labelledby="title desc">
+<title id="title">Explain a process. Compare options. Connect the evidence.</title>
+<desc id="desc">Three visual approaches: a request sequence with a return path, branching choices with different costs, and evidence converging on a conclusion.</desc>
+<rect width="1200" height="290" rx="16" fill="#faf8fd"/>
+<path d="M400 30V260M800 30V260" stroke="#ded5e9"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif">
+  <text x="36" y="48" font-size="12" font-weight="700" letter-spacing="1.5" fill="#7041b5">EXPLAIN A PROCESS</text>
+  <text x="436" y="48" font-size="12" font-weight="700" letter-spacing="1.5" fill="#7041b5">COMPARE YOUR OPTIONS</text>
+  <text x="836" y="48" font-size="12" font-weight="700" letter-spacing="1.5" fill="#7041b5">CONNECT THE EVIDENCE</text>
+  <g fill="none" stroke-width="2.5">
+    <path d="M80 84V192M316 84V192" stroke="#c4afd9"/>
+    <path d="M80 112H310l-9-6m9 6-9 6M316 157H86l9-6m-9 6 9 6" stroke="#7041b5"/>
+    <circle cx="80" cy="112" r="5" fill="#7041b5" stroke="#7041b5"/>
+    <path d="M462 139H516C545 139 539 102 568 102H743M516 139C545 139 539 175 568 175H743" stroke="#a78bc6"/>
+    <circle cx="462" cy="139" r="7" fill="#7041b5" stroke="#7041b5"/>
+    <path d="M1030 102C1083 102 1066 140 1112 140M1030 175C1083 175 1066 140 1112 140" stroke="#a78bc6"/>
+  </g>
+  <text x="80" y="95" font-size="13" fill="#746d7e">Request</text><text x="267" y="95" font-size="13" fill="#746d7e">Result</text>
+  <text x="127" y="143" font-size="14" fill="#7041b5">Follow the sequence</text>
+  <rect x="568" y="79" width="176" height="46" rx="5" fill="#eee5fa"/><rect x="568" y="152" width="176" height="46" rx="5" fill="#e1f0e9"/>
+  <text x="583" y="108" font-size="16" fill="#7041b5">Option A</text><text x="583" y="181" font-size="16" fill="#326f62">Option B</text>
+  <path d="M680 94h47M680 108h24" stroke="#a78bc6" stroke-width="4"/><path d="M680 167h25M680 181h46" stroke="#8eb9a8" stroke-width="4"/>
+  <rect x="836" y="82" width="194" height="40" rx="5" fill="#eee5fa"/><rect x="836" y="155" width="194" height="40" rx="5" fill="#eee5fa"/>
+  <text x="850" y="108" font-size="15" fill="#7041b5">Finding + source</text><text x="850" y="181" font-size="15" fill="#7041b5">Finding + source</text>
+  <circle cx="1136" cy="140" r="23" fill="#e1f0e9" stroke="#8eb9a8"/>
+  <path d="m1126 140 7 7 13-15" fill="none" stroke="#326f62" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="36" y="243" font-size="21" font-weight="650" fill="#292139">See how it works.</text>
+  <text x="436" y="243" font-size="21" font-weight="650" fill="#292139">Make the trade-offs clear.</text>
+  <text x="836" y="243" font-size="21" font-weight="650" fill="#292139">Keep the reasoning in view.</text>
+</g>
+</svg>

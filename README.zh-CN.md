@@ -1,166 +1,103 @@
 <div align="center">
 
-# VibeView.
+<img src="assets/vibeview-mark.svg" alt="VibeView" width="64" height="64" />
+
+# VibeView
+
+### 让 AI 的答案更易理解，也更愿意读下去。
+
+一个开源 Agent Skill，把当前对话中的长篇答案组织成清晰的视觉讲解。
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-### 别让好答案，埋在聊天记录里。
-
-把 AI 对话、复杂分析与长篇内容，变成愿意读下去的可视化网页。
-
-**一个 Agent Skill · 一句 `vv` · 一份独立 HTML**
-
-[看真实效果](#先看效果) · [安装使用](#安装使用) · [直接运行示例](#不接-agent也能先看效果) · [能力边界](#先说清楚边界)
-
 </div>
 
-![VibeView 1.5.2 实际输出：通过请求时序图解释超时、重试与幂等键](docs/preview.png)
+![同一个答案的两种表达：一段关于重试的说明，以及两个请求返回同一结果的关系图。](assets/readme-before-after.svg)
 
-> 上图是本仓库 **1.5.2 组装器的实际输出截图**，不是界面概念图。内容为虚构工程教学示例；视觉正文由 Agent 创作，Python 负责组装。不同模型、材料与提示会产生不同效果。
-
-## 从“回答了”到“看懂了”
-
-AI 能写很长的答案。但真正难读的，往往不是文字不够，而是关系藏在文字里：哪个方案适合谁？一次失败会影响什么？结论依赖哪些条件？
-
-VibeView 给 Agent 一套视觉表达约定和轻量构建工具：**先选最值得看懂的关系，再为内容设计画面。** 不是给每段文字套一张卡片，也不是把重要细节折叠起来。
+AI 给出了答案，理解它仍然需要花力气。VibeView 使用当前对话和已经完成的分析，把机制、差异、因果与依据画清楚，同时保留需要仔细阅读的细节。
 
 ```text
-vv 总结刚才的分析，让我看懂关键结论和依据
-
-vv 把这两个方案的差异、适用条件和代价画清楚
-
-vv 解释刚才讨论的重试机制，保留失败路径和边界
+vv 把上面的解释变得更好懂
 ```
 
-`vv` 是在支持 Skill 的 Agent 对话里使用的自然语言约定，**不是终端命令**。
+## 看实际效果
 
-## 先看效果
+**为什么超时后重试，可能创建重复任务？** 这个示例先画出请求时序，再解释处理规则及其边界。
 
-这个例子只回答一个问题：**客户端超时后，为什么不能随便换一个键重试？**
+[![VibeView 实际输出：英文版 API 超时、重试与幂等键视觉讲解。](docs/preview.png)](docs/preview.png)
 
-| 原本藏在段落里的内容 | VibeView 如何表达 |
-| --- | --- |
-| 请求成功，但回执没有到达 | 用请求时序图区分服务端状态和客户端认知 |
-| 同一次操作与另一次操作 | 用两组并列关系图展示“合流”与“分开” |
-| 同键不同参数、处理中、记录过期 | 保留完整规则表，不把边界藏在图后面 |
-| 幂等不是无条件只执行一次 | 单独展开并发、原子性和保留期三个条件 |
+[示例页面源码](docs/index.html) · [下载页面](https://raw.githubusercontent.com/tahoeliu/vibeview/main/docs/index.html) · [原始问题与答案](examples/reading-map.input.md)
 
-**[查看原始材料](examples/reading-map.input.md) → [查看视觉正文](examples/reading-map.fragment.html) → [下载 HTML](docs/index.html)**
+截图来自本仓库组装器生成的页面。工程场景为虚构示例。将页面保存为 `.html` 后用浏览器打开，也可以运行下方命令在本机构建。
 
-GitHub 文件页只显示 HTML 源码；下载后用浏览器打开，或按照下方命令在本机生成。当前没有宣称已上线的托管 Demo。
+## 你想把什么讲清楚？
 
-## 为什么是一个 Skill？
-
-你已经在和 Agent 讨论问题，结果也已经在对话里。没必要为了看清这些内容，再搬去另一款编辑器从头排版。
-
-- **继续当前对话。** 使用已有指令、上下文和结果，不默认重复研究或先写第二份报告。
-- **让关系可见。** Agent 创作主题图形、对照与阅读层次；样式原语不强制整页布局。
-- **重点突出，细节常显。** 完整说明、表格与必要来源在同一页展开。
-- **交付一个文件。** 组装器内嵌样式；默认无 JavaScript、远程字体或运行服务。
-- **少一点重复工程。** 复用品牌外壳、排版与视觉基础，把设计投入留给实际内容。
-
-**适合**：解释技术机制、对比方案、复盘过程、整理已经得到的分析结果。
-
-**不适合**：实时业务系统、交互式数据看板、像素级固定模板、需要自动事实核验的研究任务。短问题也不必生成网页。
-
-## 安装使用
-
-### 需要什么
-
-- 支持标准 Agent Skills 格式并能运行本地 Python 脚本的 harness。
-- Python 3；本次验证环境为 Python 3.13.12 / macOS。脚本只用标准库，无须 `pip install`。
-- Git，用于下面的安装命令；也可以下载 ZIP 后手动放入技能目录。
-
-### 安装
-
-在 harness 配置的 Skills 目录中克隆仓库（macOS / Linux）：
-
-```bash
-git clone https://github.com/tahoeliu/vibeview.git vibeview
-```
-
-目标目录必须不存在；不要覆盖已有安装。你也可以在已配置 SSH 时使用仓库的 SSH 克隆地址。
-
-如果已经安装 VibeView，请选择新的目标目录，或按宿主的常规流程更新现有安装；不要克隆覆盖已有目录。
-
-按照 harness 的说明重新加载本地 Skills；若尚未识别，可重启应用或新开会话。然后在对话里输入：
+![三种视觉表达：过程时序、方案比较、证据与结论的关联。](assets/readme-use-cases.svg)
 
 ```text
-vv 用网页解释为什么超时重试可能产生重复操作，保留并发和过期边界
+vv 解释这个机制，包括失败路径
+vv 对比这些方案，把收益、成本和适用条件画清楚
+vv 把刚才的分析组织成视觉讲解，保留依据和边界
 ```
 
-Agent 会根据材料创作 HTML/SVG，调用本地工具生成页面。输出位置和预览方式由宿主及当前任务决定。
+- **围绕内容设计。** Agent 为主题选择图形和构图，不强迫每个答案套用同一个模板。
+- **细节与图形一起读。** 说明、表格与来源在同一页展开，正常滚动即可阅读。
+- **接着当前工作继续。** 使用对话里已经得到的结果，不默认先写第二份报告或重复研究。
 
-VibeView 遵循标准 Agent Skills 格式。任何实现该格式并支持本地脚本执行的 harness 都可以使用。具体安装路径和重新加载方式取决于 harness。只复制 `SKILL.md` 不够，必须保留 `scripts/`、`assets/` 和 `references/`。
+## 开始使用
 
-## 不接 Agent，也能先看效果
-
-在一个独立目录克隆项目后：
+VibeView 遵循[开放的 Agent Skills 格式](https://agentskills.io/home)。支持标准本地 Skills、文件创建与 Python 3 脚本执行的 harness 均可使用。脚本仅依赖 Python 标准库。
 
 ```bash
 git clone https://github.com/tahoeliu/vibeview.git
-cd vibeview
-python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html \
-  --title "超时之后，别把同一件事做两遍" --theme violet
 ```
 
-用浏览器打开生成的 `preview.html`。macOS 可执行：
+将完整的 `vibeview` 文件夹放入 harness 的技能目录，按照宿主说明重新加载。保留 `SKILL.md`、`scripts/`、`assets/` 与 `references/`。
 
-```bash
-open preview.html
-```
-
-**再次运行请换一个输出文件名。** 工具拒绝覆盖已有文件；输出的父目录必须已存在。
-
-这条命令复现的是已经创作好的示例，**不是让 Python 从 Markdown 自动生成图解**。生成新的视觉内容需要 Agent，或者你自己编写 HTML 片段。
-
-## 它如何工作
+在当前对话中输入：
 
 ```text
-你的指令 + 对话中已有的内容
-             ↓
-Agent 确定重点、创作 HTML / SVG 和差量 CSS
-             ↓
-compose.py：检查片段 + 内嵌基础样式 + 加入品牌外壳
-             ↓
-一个新的 HTML 文件 → 浏览器阅读
+vv 用视觉讲解整理上面的分析，保留关键结论、依据和取舍
 ```
 
-默认路径不规定页面模板。四种基础主题为 `violet`、`blue`、`sage`、`amber`；也可覆盖样式，或通过 `--bare` 只复用品牌外壳。
+`vv` 是在 Agent 对话中使用的提示约定。Agent 创作正文与图形，再调用本地构建工具生成页面。简短答案无需生成网页。
+
+<details>
+<summary><strong>在本机构建示例</strong></summary>
+
+从仓库目录运行：
 
 ```bash
-python3 -B scripts/compose.py your-fragment.html your-page.html \
-  --title "你的主题" --theme sage
+python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html \
+  --title "Retry the request. Reuse the result." --theme violet
 ```
 
-片段必须有自己的 `<h1>`，不包含整页 `html/head/body/main/header/footer` 包装。只用于你或 Agent **新创作且可信的内容**。
+使用浏览器打开 `preview.html`。每次构建请选新文件名，组装器拒绝覆盖已有文件。Python 组装已创作的 HTML 片段；新内容与图形由 Agent 负责。
 
-规则化的并列内容还可以使用 [JSON 组件路径](references/template.md)。它是备选，不是默认构图方式。
+</details>
 
-## 先说清楚边界
+## 同类视觉 Skills
 
-| 边界 | 含义 |
+这些项目的能力存在交集，主要侧重不同的使用流程。
+
+| Skill | 主要侧重 |
 | --- | --- |
-| 桌面阅读优先 | 示例补充了窄屏布局，不代表 Skill 已全面适配所有移动设备 |
-| 不是 Markdown 解析器 | 1.5.2 的 `compose.py` 接收 HTML 片段；Markdown 可作为 Agent 的输入材料 |
-| 不是 HTML 安全净化器 | 静态检查不能把任意外部 HTML 变安全；不要直接喂入不可信网页 |
-| 本地构建不联网 ≠ 整条链路离线 | Agent 的模型请求取决于宿主；敏感材料遵循你的模型和隐私设置 |
-| 图解不是事实核验 | 数据、来源、假设和结论仍需核对；不能用示意图制造证据 |
-| 分享文件 ≠ 自动部署 | 本工具生成本地 HTML；上传或托管需要单独授权，分享前检查敏感内容 |
-| 效果取决于创作 | 没有“每次都一样好看”的保证，也没有未经测量的提速百分比 |
+| **VibeView** | 把当前对话中已有的解释组织成好读的视觉讲解，自主构图，并在同一页保留必要细节。 |
+| [visual-explainer](https://github.com/nicobailon/visual-explainer) | 视觉页面和幻灯片，提供架构、代码差异审查、计划核对、数据表和项目复盘等工作流。 |
+| [visualise](https://github.com/bentossell/visualise) | 在兼容的对话渲染器中内联展示交互 SVG、组件与图表。 |
+| [visualize](https://github.com/careerhackeralex/visualize) | 从提示生成多种 HTML 可视化，包括看板、信息图、流程图与幻灯片。 |
+| [visualize by display.dev](https://github.com/display-dev/visualize) | 保持品牌一致性的 HTML 作品，以及探索、评审和打磨设计的工具。 |
 
-## 版本与反馈
+VibeView 从这个需求出发：**“答案已经有了，帮我看懂它们之间的关系。”**
 
-当前版本：**1.5.2**，基于作者已安装的 1.5.1 稳定版做最小修复，**未混入 1.7.0 或 Next 实验代码**。
+## 实现与边界
 
-本次修复：用实际 HTML 标题替代文本匹配；补齐 CSS/SVG 本地引用校验；输出已生成但临时文件清理失败时，返回成功并附带明确警告。异常时仍可能留下临时文件，请按警告路径检查处理，不要修改与成品共享内容的暂存文件。
+默认输出为独立页面，无需 JavaScript、远程字体或服务器；托管和发布另行进行。桌面阅读优先，示例补充了窄屏布局，但不承诺全面移动适配。
 
-在 Python 3.13.12 / macOS 上完成 100 项隔离回归，包括主题组合、输入边界、并发冲突与故障注入；这不代表跨平台、长期运行或任意不可信 HTML 安全性保证。
+Agent 创作页面，效果与准确性取决于模型、材料和提示。分享前核对重要结论。组装器只对新创作的可信片段做静态检查，不能安全净化任意外部 HTML。模型使用和联网行为由宿主控制。
 
-如果你遇到输出错误，请在 [Issues](https://github.com/tahoeliu/vibeview/issues) 提供：版本、Python/系统版本、命令、错误信息，以及可公开的最小复现材料。不要上传密钥、Token 或业务机密。
+版本 1.5.2。该版本记录的 100 项隔离回归使用 Python 3.13.12 / macOS，不代表所有平台均已验证。[JSON 组件渲染路径](references/template.md)可用于规则化结构，默认仍推荐自主创作。
 
-欢迎贡献更清楚的图解示例、文档改进和可复现的问题。若这个项目帮你把一个难懂的问题讲清楚了，欢迎 Star，或分享那份经过脱敏的作品。
+欢迎分享可公开的视觉讲解、贡献示例，或 [Star 项目](https://github.com/tahoeliu/vibeview)。问题请通过 [Issues](https://github.com/tahoeliu/vibeview/issues) 提供 Python 与系统版本、命令、错误和不含隐私信息的最小示例。
 
-## 许可证
-
-[MIT](LICENSE) © 2026 tahoeliu。
+[MIT](LICENSE) © 2026 tahoeliu

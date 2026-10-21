@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Wrap agent-authored HTML with reusable VibeView design primitives. No prescribed layout."""
+"""Build a standalone page from an authored HTML fragment using shared VibeView styles."""
 import argparse
 import html
 import json
@@ -120,17 +120,17 @@ def compose(fragment, title, theme='violet', kit=True):
         base = (Path(__file__).resolve().parent.parent / 'assets/design.css').read_text(encoding='utf-8')
     else:
         base = 'body{margin:0;color:#252535;background:#fafafa;font-family:system-ui,sans-serif}.vv-brandbar{padding:22px 40px;border-bottom:1px solid #ddd}.vv-brandbar a{color:inherit;text-decoration:none;font-size:25px;font-weight:700}.vv-footer{padding:24px 40px;font-size:12px;color:#667}'
-    page = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main">' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">VibeView · Visual reading</div></footer></body></html>'
+    page = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main">' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">VibeView · Visual explanations</div></footer></body></html>'
     return page, list(dict.fromkeys(check.warnings))
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('input', help='Agent-authored HTML fragment file; - for stdin')
-    parser.add_argument('output', help='New HTML path in existing directory')
+    parser.add_argument('input', help='HTML fragment file, or - to read from stdin')
+    parser.add_argument('output', help='New HTML file in an existing directory')
     parser.add_argument('--title', required=True)
     parser.add_argument('--theme', choices=('violet', 'blue', 'sage', 'amber'), default='violet')
-    parser.add_argument('--bare', action='store_true', help='Only brand shell; no design kit')
-    parser.add_argument('--lang', choices=('en', 'zh-CN'), default='en', help='Language metadata and shell copy (default: en)')
+    parser.add_argument('--bare', action='store_true', help='Keep the brand shell without the shared design styles')
+    parser.add_argument('--lang', choices=('en', 'zh-CN'), default='en', help='Document language metadata (default: en)')
     args = parser.parse_args()
     start = time.perf_counter()
     try:

@@ -1,20 +1,50 @@
-# Conditional JSON component path
+# Optional JSON renderer
 
-Use this path only when the content is regular, the components can express it fully and accurately, and the resulting layout will not be monotonous or lower quality. Do not use a template just because the fields can contain the content; no template trial is required. For unsuitable material, compose freely with `compose.py` or write complete HTML.
+Use this renderer for regular, structured content that the supplied components can represent faithfully. For a custom explanation, use `compose.py` instead. Choose based on the content; a template trial is not required.
 
-`python <skill-directory>/scripts/render.py <content.json> <new-output.html>`
+```bash
+python3 <skill-directory>/scripts/render.py <content.json> <new-page.html>
+```
 
-Top-level fields: `title`, optional `subtitle`, `meta`, `language` (`en` by default or `zh-CN`), `theme` (`blue` / `sage` / `amber` / `violet`), and a `blocks` array. Blocks share `type`, `title`, `text` (string or paragraph array), `note`, `variant` (`plain` / `tinted`), and `columns` (1–4). Ordinary fields are plain text.
+The output directory must exist, and the destination file must be new. All fields contain plain text unless explicitly marked as HTML. The renderer assembles the page; it does not interpret the data or check the conclusions.
 
-- `prose` / `callout`: `text`.
-- `compare`: `items` with `title` / `text`, optional `label`.
-- `metrics`: `items` with `value` / `title` / `text`.
-- `flow` / `timeline`: `items` with `title` / `text`, optional `label`.
-- `findings`: `items` with `title` / `text`, optional `label` / `action` / `source`.
-- `bars`: `items` with `title` / nonnegative `value`, optional `unit`; zero-based linear bars only, no negative values or stacking.
-- `sources`: `items` with `title` / `text` / `url`; URLs must be credential-free HTTP(S).
-- `custom`: `html` is a restricted static HTML/SVG subset; no `style`, scripts, events, or external resources. SVG ids must start with `custom-` and be unique on the page.
+## Page fields
 
-Example: `{"title":"Two options","theme":"blue","blocks":[{"type":"compare","items":[{"title":"A","text":"Evidence"},{"title":"B","text":"Trade-off"}]}]}`
+- `title`: required, non-empty page title.
+- `blocks`: required array of content blocks.
+- `subtitle`, `meta`: optional text.
+- `language`: `en` (default) or `zh-CN`.
+- `theme`: `blue`, `sage`, `amber`, or `violet`.
 
-The script mechanically assembles pages. It does not infer the meaning of data or validate business conclusions. The output directory must exist and the output file must not. Assembly checks are included; do not launch a separate check workflow.
+## Blocks
+
+Blocks share the fields `type`, `title`, `text` (a string or an array of paragraphs), `note`, `variant` (`plain` or `tinted`), and `columns` (1–4).
+
+| Type | Content |
+| --- | --- |
+| `prose`, `callout` | `text` |
+| `compare` | `items` with `title`, `text`, and an optional `label` |
+| `metrics` | `items` with `value`, `title`, and `text` |
+| `flow`, `timeline` | `items` with `title`, `text`, and an optional `label` |
+| `findings` | `items` with `title` and `text`; optional `label`, `action`, and `source` |
+| `bars` | `items` with `title` and a nonnegative `value`; optional `unit`. Bars use a zero-based linear scale. Negative values and stacking are unsupported. |
+| `sources` | `items` with `title`, `text`, and `url`. Use HTTP(S) URLs without embedded credentials. |
+| `custom` | `html` containing the supported static HTML/SVG subset. No styles, scripts, event handlers, or external resources. SVG IDs must begin with `custom-` and be unique across the page. |
+
+```json
+{
+  "title": "Two options, different trade-offs",
+  "theme": "blue",
+  "blocks": [
+    {
+      "type": "compare",
+      "items": [
+        {"title": "Option A", "text": "Explain its strengths and constraints."},
+        {"title": "Option B", "text": "Explain when the alternative fits better."}
+      ]
+    }
+  ]
+}
+```
+
+The renderer performs its own assembly checks. Follow any checks required by the host or user, without adding another review workflow by default.
