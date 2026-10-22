@@ -13,7 +13,7 @@ The output directory must exist, and the destination file must be new. All field
 - `title`: required, non-empty page title.
 - `blocks`: required array of content blocks.
 - `subtitle`, `meta`: optional text.
-- `language`: `en` (default) or `zh-CN`.
+- `language`: `en` by default; use `zh-CN` for Simplified Chinese, `zh-TW` for Traditional Chinese, or a tag such as `fr` or `pt-BR`. Tags must match `[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*` and contain at most 63 characters. This is a structural check, not validation against the IANA registry. The renderer does not translate content. Fixed captions and footer text are localized for English and Chinese. Other languages receive a brand-only footer and no automatic scale caption; supply meaningful source titles and explain the bar scale in a localized `note`.
 - `theme`: `blue`, `sage`, `amber`, or `violet`.
 
 ## Blocks
@@ -46,5 +46,7 @@ Blocks share the fields `type`, `title`, `text` (a string or an array of paragra
   ]
 }
 ```
+
+Language tags do not change writing direction. This renderer uses a left-to-right layout; use a fully authored page rather than this path for right-to-left output.
 
 The renderer performs its own assembly checks. Follow any checks required by the host or user, without adding another review workflow by default.

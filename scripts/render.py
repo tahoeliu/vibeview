@@ -24,6 +24,25 @@ def text(value, label='text'):
 def esc(value):
     return html.escape(text(value), quote=True)
 
+def validate_language(value):
+    """Check conservative language-tag structure, not IANA registry validity."""
+    if not isinstance(value, str) or len(value) > 63 or not re.fullmatch(r'[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*', value):
+        raise ValueError('language must be a tag of at most 63 characters matching [A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*')
+    return value
+
+def shell_copy(language):
+    """Select fixed UI copy only; authored content is never translated."""
+    parts = validate_language(language).lower().split('-')
+    primary = parts[0]
+    if primary == 'en':
+        return {'footer': 'VibeView · Visual explanations', 'bars': 'Linear scale from zero; the longest bar represents the largest value in this group. ', 'source': 'Source'}
+    if primary == 'zh':
+        traditional = 'hant' in parts or ('hans' not in parts and any(region in parts for region in ('tw', 'hk', 'mo')))
+        if traditional:
+            return {'footer': 'VibeView · 視覺化解說', 'bars': '使用從零開始的線性刻度；最長的長條表示本組中的最大值。 ', 'source': '來源'}
+        return {'footer': 'VibeView · 可视化讲解', 'bars': '使用从零开始的线性刻度；最长的条形表示本组中的最大值。 ', 'source': '来源'}
+    return {'footer': 'VibeView', 'bars': '', 'source': ''}
+
 def paragraphs(value):
     if value is None or value == '' or value == []:
         return ''
@@ -104,7 +123,8 @@ def items_of(block):
         raise ValueError('items must contain 1..100 entries')
     return items
 
-def render_block(b, index):
+def render_block(b, index, language='en'):
+    copy = shell_copy(language)
     fields(b, 'type title text items note variant columns html unit', 'block')
     kind = b.get('type')
     types = {'prose', 'compare', 'metrics', 'flow', 'timeline', 'findings', 'bars', 'callout', 'custom', 'sources'}
@@ -158,11 +178,11 @@ def render_block(b, index):
             maximum = max(values) or 1
             unit = esc(b.get('unit', ''))
             rows = ['<div class="bar-row"><span class="bar-label">' + esc(i.get('title', '')) + '</span><div class="track"><div class="fill" style="width:' + str(round(v / maximum * 100, 4)) + '%"></div></div><span class="bar-value">' + esc(str(v)) + unit + '</span></div>' for i, v in zip(items, values)]
-            body = '<div class="bars">' + ''.join(rows) + '<p class="caption">Linear scale from zero; the longest bar represents the largest value in this group. ' + esc(b.get('note', '')) + '</p></div>'
+            body = '<div class="bars">' + ''.join(rows) + '<p class="caption">' + esc(copy['bars']) + esc(b.get('note', '')) + '</p></div>'
         else:
             rows = []
-            for i in items:
-                label = esc(i.get('title', 'Source'))
+            for n, i in enumerate(items, 1):
+                label = esc(i.get('title', copy['source'] or str(n)))
                 link = '<a href="' + url(i['url']) + '" target="_blank" rel="noopener noreferrer">' + label + '</a>' if i.get('url') else label
                 rows.append('<li>' + link + paragraphs(i.get('text')) + '</li>')
             body = '<ul class="sources">' + ''.join(rows) + '</ul>'
@@ -182,6 +202,7 @@ class FinalCheck(HTMLParser):
 
 def render(data):
     fields(data, 'title subtitle meta theme language blocks', 'page')
+    language = validate_language(data.get('language', 'en'))
     title = text(data.get('title'), 'title')
     if not title.strip():
         raise ValueError('title must not be empty')
@@ -192,12 +213,9 @@ def render(data):
     if not isinstance(blocks, list) or not 1 <= len(blocks) <= 80:
         raise ValueError('blocks must contain 1..80 entries')
     css = (Path(__file__).resolve().parent.parent / 'assets/preview.css').read_text(encoding='utf-8')
-    body = ''.join(render_block(b, n) for n, b in enumerate(blocks, 1))
-    language = data.get('language', 'en')
-    if language not in ('en', 'zh-CN'):
-        raise ValueError('language must be en or zh-CN')
-    footer = 'VibeView · Visual explanations'
-    page = '<!doctype html>\n<html lang="' + language + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + esc(title) + '</title><style>' + css + '</style></head><body data-theme="' + theme + '"><header><div class="wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"><section class="hero"><div class="wrap"><h1>' + esc(title) + '</h1><div class="lead">' + paragraphs(data.get('subtitle')) + '</div><p class="meta">' + esc(data.get('meta', '')) + '</p></div></section>' + body + '</main><footer><div class="wrap">' + footer + '</div></footer></body></html>'
+    body = ''.join(render_block(b, n, language) for n, b in enumerate(blocks, 1))
+    footer = esc(shell_copy(language)['footer'])
+    page = '<!doctype html>\n<html lang="' + esc(language) + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + esc(title) + '</title><style>' + css + '</style></head><body data-theme="' + theme + '"><header><div class="wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"><section class="hero"><div class="wrap"><h1>' + esc(title) + '</h1><div class="lead">' + paragraphs(data.get('subtitle')) + '</div><p class="meta">' + esc(data.get('meta', '')) + '</p></div></section>' + body + '</main><footer><div class="wrap">' + footer + '</div></footer></body></html>'
     checker = FinalCheck()
     checker.feed(page)
     if len(page.encode()) > 8 * 1024 * 1024:

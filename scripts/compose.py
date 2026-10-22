@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Build a standalone page from an authored HTML fragment using shared VibeView styles."""
 import argparse
+import base64
+import hashlib
 import html
 import json
 import re
@@ -9,14 +11,14 @@ import time
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit
-from render import write_new
+from render import shell_copy, validate_language, write_new
 
 LIMIT = 4 * 1024 * 1024
 VOID = set('area br col hr img input source track wbr'.split())
 BANNED = set('html head body main header footer script iframe object embed link meta base form input button select textarea dialog details summary template audio video foreignobject animate animatetransform set'.split())
 
 def css_check(css):
-    if re.search(r'@import|expression\s*\(|behavior\s*:|-moz-binding|javascript\s*:|</style', css, re.I):
+    if re.search(r'@import|expression\s*\(|(?<![-\w])behavior\s*:|-moz-binding|javascript\s*:|</style', css, re.I):
         raise ValueError('Active/external CSS or closing style tag is not allowed')
     targets = re.findall(r'url\(\s*[\"\']?([^\)\"\']+)', css, re.I)
     for target in targets:
@@ -28,8 +30,10 @@ def css_check(css):
 
 class AuthoredFragment(HTMLParser):
     """Basic checks for newly authored content, NOT a sanitizer for untrusted HTML."""
-    def __init__(self):
+    def __init__(self, motion=False):
         super().__init__(convert_charrefs=True)
+        self.motion = motion
+        self.motion_nodes = 0
         self.stack = []
         self.ids = {'main'}
         self.refs = []
@@ -81,6 +85,36 @@ class AuthoredFragment(HTMLParser):
                 self.check_visibility(v or '')
             if k in ('fill', 'stroke', 'filter', 'clip-path', 'mask', 'marker-end', 'marker-start', 'marker-mid', 'cursor'):
                 self.refs.extend(css_check(v or ''))
+        motion_attrs = {k: v for k, v in attrs if k.startswith('data-vv-')}
+        if motion_attrs:
+            allowed = {'data-vv-motion', 'data-vv-duration', 'data-vv-delay', 'data-vv-dx', 'data-vv-dy', 'data-vv-repeat'}
+            if not self.motion or set(motion_attrs) - allowed:
+                raise ValueError('Motion attributes require --motion and the documented schema')
+            kind = a.get('data-vv-motion')
+            if kind not in ('flow', 'assemble', 'focus'):
+                raise ValueError('Unknown or missing motion kind')
+            if tag not in ('g', 'path', 'circle', 'rect', 'ellipse', 'line', 'polyline', 'polygon') or 'svg' not in self.stack:
+                raise ValueError('Motion is limited to SVG graphic objects; keep prose static')
+            if kind == 'flow' and (tag not in ('path', 'line', 'polyline') or not re.fullmatch(r'[0-9., ]{1,40}', a.get('stroke-dasharray', ''))):
+                raise ValueError('Flow requires a dashed SVG path or line')
+            repeat = a.get('data-vv-repeat', 'loop' if kind == 'flow' else 'once')
+            if repeat not in ('once', 'loop') or (repeat == 'loop' and kind != 'flow'):
+                raise ValueError('Only flow supports loop; repeat must be once or loop')
+            if kind == 'flow':
+                raw_dash = a['stroke-dasharray']
+                if not re.fullmatch(r'\s*\d+(?:\.\d+)?(?:[ ,]+\d+(?:\.\d+)?)*\s*', raw_dash):
+                    raise ValueError('Flow dash pattern requires positive plain numbers')
+                dash = [float(x) for x in re.split(r'[ ,]+', raw_dash.strip())]
+                if any(x <= 0 for x in dash) or sum(dash) * (2 if len(dash) % 2 else 1) > 4096:
+                    raise ValueError('Flow dash period must be positive and at most 4096 units')
+            for key, lower, upper in (('data-vv-duration', 200, 4000), ('data-vv-delay', 0, 800), ('data-vv-dx', -240, 240), ('data-vv-dy', -240, 240)):
+                if key in a and (not re.fullmatch(r'-?\d{1,4}', a[key] or '') or not lower <= int(a[key]) <= upper):
+                    raise ValueError('Invalid motion numeric bound: ' + key)
+            if kind != 'assemble' and ('data-vv-dx' in a or 'data-vv-dy' in a):
+                raise ValueError('Offsets are only supported for assemble')
+            self.motion_nodes += 1
+            if self.motion_nodes > 48:
+                raise ValueError('Keep motion selective: at most 48 graphic objects')
         if tag == 'img' and 'alt' not in a:
             raise ValueError('Image requires alt')
     def handle_endtag(self, tag):
@@ -104,14 +138,17 @@ class AuthoredFragment(HTMLParser):
         if re.search(r'display\s*:\s*none|visibility\s*:\s*hidden|opacity\s*:\s*0\s*[;}]|content-visibility\s*:\s*hidden', value, re.I):
             self.warnings.append('Possible hidden content; review before delivering')
 
-def compose(fragment, title, theme='violet', kit=True, layout='reading'):
+def compose(fragment, title, theme='morandi', kit=True, layout='reading', language='en', motion=False):
+    language = validate_language(language)
     if not isinstance(title, str) or not title.strip():
         raise ValueError('Title required')
-    if theme not in ('violet', 'blue', 'sage', 'amber'):
+    if theme not in ('morandi', 'violet', 'blue', 'sage', 'amber'):
         raise ValueError('Unknown theme')
     if layout not in ('reading', 'custom'):
         raise ValueError('Unknown layout; choose reading or custom')
-    check = AuthoredFragment()
+    if not isinstance(motion, bool):
+        raise ValueError('Motion must be a boolean')
+    check = AuthoredFragment(motion=motion)
     check.feed(fragment)
     check.close()
     css = '\n'.join(check.styles)
@@ -132,7 +169,19 @@ def compose(fragment, title, theme='violet', kit=True, layout='reading'):
     if layout == 'reading':
         base += '\n' + (Path(__file__).resolve().parent.parent / 'assets/layout.css').read_text(encoding='utf-8')
     main_class = ' class="vv-reading-layout"' if layout == 'reading' else ''
-    page = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '" data-vv-layout="' + layout + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"' + main_class + '>' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">VibeView · Visual explanations</div></footer></body></html>'
+    footer = html.escape(shell_copy(language)['footer'])
+    runtime_tag = ''
+    script_policy = "script-src 'none'; "
+    if motion and check.motion_nodes:
+        runtime = (Path(__file__).resolve().parent.parent / 'assets/motion.js').read_text(encoding='utf-8')
+        if '</script' in runtime.lower():
+            raise ValueError('Invalid bundled motion runtime')
+        digest = base64.b64encode(hashlib.sha256(runtime.encode('utf-8')).digest()).decode('ascii')
+        script_policy = "script-src 'sha256-" + digest + "'; "
+        runtime_tag = '<script>' + runtime + '</script>'
+        base += '\n[data-vv-motion]{transform-box:fill-box;transform-origin:center}'
+    base += '\n@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}\n@media print{*,*::before,*::after{animation:none!important;transition:none!important}[data-vv-motion]{transform:none!important;stroke-dashoffset:0!important}}'
+    page = '<!doctype html>\n<html lang="' + html.escape(language, quote=True) + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; ' + script_policy + 'img-src data:; connect-src \'none\'; object-src \'none\'; form-action \'none\'; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '" data-vv-layout="' + layout + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"' + main_class + '>' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">' + footer + '</div></footer>' + runtime_tag + '</body></html>'
     return page, list(dict.fromkeys(check.warnings))
 
 def main():
@@ -140,10 +189,11 @@ def main():
     parser.add_argument('input', help='HTML fragment file, or - to read from stdin')
     parser.add_argument('output', help='New HTML file in an existing directory')
     parser.add_argument('--title', required=True)
-    parser.add_argument('--theme', choices=('violet', 'blue', 'sage', 'amber'), default='violet')
+    parser.add_argument('--theme', choices=('morandi', 'violet', 'blue', 'sage', 'amber'), default='morandi')
     parser.add_argument('--bare', action='store_true', help='Omit visual primitives; retain reading boundaries unless --layout custom is set')
     parser.add_argument('--layout', choices=('reading', 'custom'), default='reading', help='Use safe reading boundaries (default), or preserve an authored layout with custom')
-    parser.add_argument('--lang', choices=('en', 'zh-CN'), default='en', help='Document language metadata (default: en)')
+    parser.add_argument('--lang', type=validate_language, default='en', help='Document language metadata and fixed UI copy only; authored content is not translated (default: en)')
+    parser.add_argument('--motion', action='store_true', help='Embed fixed offline motion; flow loops by default, other effects play once; no authored scripts')
     args = parser.parse_args()
     start = time.perf_counter()
     try:
@@ -154,9 +204,7 @@ def main():
                 raw = f.read(LIMIT + 1)
         if len(raw) > LIMIT:
             raise ValueError('Input exceeds 4 MiB')
-        page, warnings = compose(raw.decode('utf-8-sig'), args.title, args.theme, not args.bare, args.layout)
-        if args.lang == 'zh-CN':
-            page = page.replace('<html lang="en">', '<html lang="zh-CN">')
+        page, warnings = compose(raw.decode('utf-8-sig'), args.title, args.theme, not args.bare, args.layout, args.lang, args.motion)
         out = write_new(args.output, page, warnings)
         print(json.dumps({'status': 'ok', 'file': str(out), 'input_bytes': len(raw), 'output_bytes': len(page.encode()), 'elapsed_ms': round((time.perf_counter()-start)*1000, 2), 'warnings': warnings, 'scope': 'Static checks for agent-authored fragments, not a sanitizer or visual review'}, ensure_ascii=False))
         return 0

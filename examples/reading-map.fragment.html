@@ -17,7 +17,7 @@
 </style>
 <div class="vv-wrap">
 <section class="rm-intro" aria-labelledby="reading-title">
-  <div class="rm-eyebrow"><strong>A visual guide to safe API retries</strong><span>Engineering explainer · VibeView 1.5.3</span></div>
+  <div class="rm-eyebrow"><strong>A visual guide to safe API retries</strong><span>Engineering explainer · VibeView 1.6.0-lab.1</span></div>
   <div class="rm-hero">
     <div><h1 id="reading-title">Retry the request.<br><span>Reuse the result.</span></h1><p class="rm-deck">The server may finish the work before the client times out. An idempotency key lets a retry find the <strong>original operation</strong> instead of starting a second one, within the API’s documented retry window.</p></div>
     <aside class="rm-margin"><strong>One operation, one key.</strong><p>Reuse the original key and parameters while the record is valid.</p><p>Use a new key when you intend to start a new operation.</p></aside>
@@ -114,9 +114,9 @@
 </section>
 <section class="rm-source" aria-label="Example source and reproduction">
   <p><strong>About this example</strong> — The service, endpoint, parameters, keys, and task IDs are fictional. This example illustrates a retry mechanism; it does not describe a production incident.</p>
-  <p><strong>From answer to visual guide</strong> — The original question and complete answer are in <code>examples/reading-map.input.md</code>; the visual body is <code>examples/reading-map.fragment.html</code>. The guide pairs the request sequence with a comparison of operations, the server’s decision rules, and the limits of the guarantee.</p>
-  <p><strong>Build this example</strong> — Built with the VibeView 1.5.3 release <code>scripts/compose.py</code>; it embeds <code>assets/design.css</code>. The composer accepts HTML fragments and does not parse Markdown. Run this command from the repository root. Choose a new output filename; the composer will not overwrite an existing file.</p>
-  <pre><code>python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html --title 'Retry the request. Reuse the result.' --theme violet</code></pre>
-  <div class="rm-footerline"><span>Static HTML / No JavaScript / No external fonts or images</span><span>Built with VibeView 1.5.3</span></div>
+  <p><strong>From answer to visual guide</strong> — This self-contained, fictional example is defined in <code>examples/reading-map.fragment.html</code>; no separate source report is included. The guide pairs the request sequence with a comparison of operations, the server’s decision rules, and the limits of the guarantee.</p>
+  <p><strong>Build this example</strong> — Built with the VibeView 1.6.0-lab.1 release <code>scripts/compose.py</code>; it embeds <code>assets/design.css</code>. The composer accepts HTML fragments and does not parse Markdown. Run this command from the repository root. Choose a new output filename; the composer will not overwrite an existing file.</p>
+  <pre><code>python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html --title 'Retry the request. Reuse the result.' --theme violet --layout custom --lang en</code></pre>
+  <div class="rm-footerline"><span>Static HTML / No JavaScript / No external fonts or images</span><span>Built with VibeView 1.6.0-lab.1</span></div>
 </section>
 </div>

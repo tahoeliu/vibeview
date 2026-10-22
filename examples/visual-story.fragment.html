@@ -1,0 +1,192 @@
+<style>
+.vvs-intro,.vvs-scene,.vvs-end{--vvs-ink:#292737;--vvs-muted:#656172;--vvs-purple:#7553b7;--vvs-green:#367d73;color:var(--vvs-ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+.vvs-intro{padding:64px 0 34px;position:relative}.vvs-eyebrow{font-size:14px;font-weight:650;color:#7553b7;margin:0 0 16px}.vvs-intro h1{font-size:clamp(38px,5.4vw,72px);line-height:1.22;letter-spacing:0;max-width:15em}.vvs-intro h1 span{color:#7553b7}.vvs-intro p.vvs-deck{font-size:19px;line-height:1.8;max-width:36em;margin:22px 0 0;color:#656172}.vvs-disclaimer{font-size:14px;line-height:1.8;color:#656172;margin:12px 0 0}
+.vvs-scene{padding:54px 0 68px;border-top:1px solid #ded9e9}.vvs-scene h2{font-size:clamp(28px,3.1vw,42px);line-height:1.4;letter-spacing:0;margin:0}.vvs-scene p{line-height:1.8}.vvs-heading{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:36px;align-items:end}.vvs-heading>p{margin:0;color:#656172;max-width:29em}.vvs-index{display:block;color:#7553b7;font-size:14px;font-weight:650;margin-bottom:12px}.vvs-scene figure{margin:0}.vvs-scene svg{display:block;width:100%;height:auto;overflow:visible}.vvs-scene svg text{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:21px}.vvs-scene figcaption{font-size:14px;line-height:1.8;color:#656172;margin-top:18px}.vvs-conclusion{font-size:19px;margin:26px 0 0;padding-left:18px;border-left:3px solid #7553b7;max-width:40em}.vvs-conclusion strong{font-weight:650}.vvs-small{font-size:14px;color:#656172}
+.vvs-flowstage{margin-top:34px;padding:28px 26px 22px;background:linear-gradient(135deg,#f0eafa 0%,#faf8fd 53%,#edf5f1 100%);border-radius:26px}.vvs-pipeline{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:22px;align-items:start}.vvs-pipeline>div{min-width:0}.vvs-stepname{font-size:16px;color:#656172;margin:0 0 12px}.vvs-stepname strong{color:#292737;font-size:24px;font-weight:650;margin-right:6px}.vvs-pipeline svg{max-width:340px;margin-inline:auto}.vvs-static{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:26px;padding-top:24px;border-top:1px solid #d9d0e7}.vvs-staticitem{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}.vvs-staticitem p{font-size:16px;margin:0}.vvs-staticitem p span{font-size:14px;color:#656172}.vvs-tokenrail{height:54px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #bcb0d0;background:#ffffff70}.vvs-tokenrail i{display:block;flex:none;width:24px;height:30px;background:#7553b7;border-radius:5px;border:1px solid #61439a;box-shadow:inset 0 5px #ffffff35}.vvs-tokenrail span{font-size:15px;color:#656172}
+.vvs-optics{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:40px;align-items:center;margin-top:22px}.vvs-lensart{position:relative;background:radial-gradient(ellipse at 49% 48%,#e9e0f5 0%,#f3edf8 37%,transparent 69%)}.vvs-lensart svg{max-width:590px;margin:auto}.vvs-lensart figcaption{text-align:center;margin:0 auto;max-width:31em}.vvs-opticstext h3{font-size:24px;line-height:1.5;letter-spacing:0;margin:0 0 16px}.vvs-opticstext>p{color:#656172;margin:0 0 20px}.vvs-aperturepair{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding-block:20px;border-top:1px solid #ded9e9;border-bottom:1px solid #ded9e9}.vvs-aperturepair svg{max-width:150px;margin:0 auto 14px}.vvs-aperturepair p{text-align:center;font-size:16px;margin:0;color:#656172}.vvs-aperturepair strong{display:block;font-size:20px;color:#292737}.vvs-opticstext p.vvs-conclusion{color:#292737;margin-top:24px}.vvs-opticstext p.vvs-small{margin-top:16px;font-size:14px}
+.vvs-dataheading{display:flex;align-items:start;justify-content:space-between;gap:28px}.vvs-dataintro{margin:15px 0 0;color:#656172;max-width:40em}.vvs-denominator{text-align:right;white-space:nowrap;color:#656172;font-size:14px;line-height:1.6}.vvs-denominator strong{display:block;font-size:56px;font-weight:500;font-family:Georgia,serif;line-height:1.1;color:#7553b7}.vvs-chart{margin-top:34px!important;padding:32px 0 24px;border-top:1px solid #ded9e9;border-bottom:1px solid #ded9e9}.vvs-legend{display:flex;flex-wrap:wrap;gap:12px 26px;margin-bottom:26px;font-size:15px;color:#656172}.vvs-legend span{display:flex;gap:9px;align-items:center}.vvs-key{width:16px;height:16px;display:inline-block;flex:none}.vvs-success{background:#367d73}.vvs-wait{background:repeating-linear-gradient(135deg,#f0deb4 0,#f0deb4 5px,#c4a96e 5px,#c4a96e 6px)}.vvs-fail{background:#ac6477}.vvs-chartrow{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:start;margin-top:25px}.vvs-rowname{font-size:19px;font-weight:650;margin:10px 0 0;line-height:1.5!important}.vvs-stackbar{display:flex;width:100%;height:58px;outline:1px solid #ffffff;overflow:hidden}.vvs-stackbar>span{display:block;flex:none;min-width:0;height:100%;box-sizing:border-box}.vvs-bar60{width:60%}.vvs-bar30{width:30%}.vvs-bar10{width:10%}.vvs-bar80{width:80%}.vvs-bar15{width:15%}.vvs-bar5{width:5%}.vvs-values{display:flex;flex-wrap:wrap;gap:4px 22px;margin-top:10px;font-size:16px;color:#656172}.vvs-values strong{color:#292737;font-weight:600}.vvs-chartaxis{margin:16px 0 0 88px;display:flex;justify-content:space-between;font-size:14px;color:#656172;border-top:1px solid #cbc5d6;padding-top:6px}.vvs-chart figcaption{margin-left:88px}.vvs-datatail{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:36px;margin-top:30px;align-items:center}.vvs-delta{display:flex;gap:18px;align-items:center}.vvs-delta strong{font-family:Georgia,serif;font-weight:400;font-size:68px;line-height:1;color:#367d73}.vvs-delta span{font-size:16px;line-height:1.7;color:#656172}.vvs-datatail .vvs-conclusion{margin:0}.vvs-end{padding:24px 0 46px;border-top:1px solid #ded9e9;color:#656172;font-size:14px;line-height:1.8}
+@media(max-width:760px){.vvs-intro{padding-top:38px}.vvs-intro h1{max-width:10em}.vvs-heading,.vvs-optics,.vvs-datatail{grid-template-columns:1fr;gap:24px}.vvs-scene{padding-block:36px 46px}.vvs-flowstage{padding:22px 18px}.vvs-pipeline{grid-template-columns:1fr;gap:16px}.vvs-pipeline>div+div{border-top:1px solid #ded9e9;padding-top:20px}.vvs-pipeline svg{max-width:320px}.vvs-stepname{margin-bottom:0}.vvs-static{grid-template-columns:1fr;gap:18px}.vvs-lensart{order:0}.vvs-opticstext{order:1}.vvs-dataheading{gap:14px}.vvs-denominator strong{font-size:44px}.vvs-chart{padding-top:23px}.vvs-chartrow{grid-template-columns:1fr;gap:8px}.vvs-rowname{margin:0}.vvs-stackbar{height:48px}.vvs-chartaxis,.vvs-chart figcaption{margin-left:0}.vvs-values{gap:4px 14px;font-size:15px}.vvs-datatail{gap:26px}.vvs-conclusion{font-size:18px}.vvs-lensart svg{max-width:480px}}
+@media(prefers-reduced-motion:reduce){.vvs-scene *{scroll-behavior:auto}}
+@media print{.vvs-intro{padding-top:16px}.vvs-scene{break-inside:avoid;padding-block:25px}.vvs-flowstage{background:#f4f1f8}.vvs-stackbar,.vvs-tokenrail,.vvs-aperturepair{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+
+<section class="vvs-intro" aria-labelledby="vvs-title">
+  <p class="vvs-eyebrow">视觉叙事习作 · 机制 / 物体 / 数据</p>
+  <h1 id="vvs-title">复杂内容，<br><span>先让人想看</span></h1>
+  <p class="vvs-deck">让流线说清拥堵，让光影揭开结构，让同一把尺子呈现变化。往下读，三种构图，三次从“看见”到“明白”。</p>
+  <p class="vvs-disclaimer">以下均为解释性示例，不是研究成效证明；机制与光学图为简化示意，数据对比使用合成数据。</p>
+</section>
+
+<section class="vvs-scene" aria-labelledby="vvs-queue-title">
+  <div class="vvs-heading">
+    <div><span class="vvs-index">01 / 看见机制</span><h2 id="vvs-queue-title">为什么队伍<br>越等越长？</h2></div>
+    <p>不一定是有人停下了。只要进入的任务持续多于处理的任务，差额就会留在队伍里。</p>
+  </div>
+  <figure class="vvs-flowstage">
+    <div class="vvs-pipeline">
+      <div>
+        <p class="vvs-stepname"><strong>3 件进入</strong> / 单位时间</p>
+        <svg viewBox="0 0 320 210" role="img" aria-label="每单位时间，三个任务沿流线进入队列">
+          <defs><linearGradient id="vvs-task-glow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a087cc"/><stop offset="1" stop-color="#7553b7"/></linearGradient></defs>
+          <path d="M12 50 C100 50 140 105 294 105 M12 105 H294 M12 160 C100 160 140 105 294 105" fill="none" stroke="#d3c6e6" stroke-width="2"/>
+          <path d="M12 105 H288" fill="none" stroke="#7553b7" stroke-width="3" stroke-dasharray="10 10" data-vv-motion="flow" data-vv-duration="4000"/>
+          <path d="M280 95 L294 105 L280 115" fill="none" stroke="#7553b7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="43" y="29" width="34" height="42" rx="7" fill="url(#vvs-task-glow)" stroke="#7553b7"/>
+          <rect x="84" y="84" width="34" height="42" rx="7" fill="url(#vvs-task-glow)" stroke="#7553b7"/>
+          <rect x="43" y="139" width="34" height="42" rx="7" fill="url(#vvs-task-glow)" stroke="#7553b7"/>
+          <path d="M51 42 H67 M51 49 H63 M92 97 H108 M92 104 H104 M51 152 H67 M51 159 H63" fill="none" stroke="#f7f1ff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="vvs-stepname"><strong>+1 件积压</strong> / 单位时间</p>
+        <svg viewBox="0 0 320 210" role="img" aria-label="入口收窄为处理通道，紫色任务在通道前叠积；图中显示三单位时间后留下的三件任务">
+          <path d="M8 41 H170 Q188 41 198 60 L215 80 H310 M8 169 H170 Q188 169 198 150 L215 130 H310" fill="none" stroke="#b4a1cf" stroke-width="2"/>
+          <path d="M202 69 L215 80 H310 V130 H215 L202 142 Z" fill="#e4daef" stroke="none"/>
+          <path d="M221 104 H286" fill="none" stroke="#7553b7" stroke-width="2" stroke-dasharray="7 7"/>
+          <path d="M280 97 L290 104 L280 111" fill="none" stroke="#7553b7" stroke-width="2"/>
+          <ellipse cx="136" cy="151" rx="65" ry="9" fill="#d9cce7" stroke="none"/>
+          <rect x="79" y="93" width="48" height="54" rx="8" fill="#b09bce" stroke="#9275b9"/>
+          <rect x="103" y="77" width="48" height="62" rx="8" fill="#9374bd" stroke="#8060ae"/>
+          <g fill="none" data-vv-motion="assemble" data-vv-duration="1800" data-vv-dx="-38" data-vv-dy="-12">
+            <rect x="127" y="61" width="48" height="70" rx="8" fill="url(#vvs-task-glow)" stroke="#654397"/>
+            <path d="M138 78 H162 M138 86 H157" fill="none" stroke="#eee5fc" stroke-width="3" stroke-linecap="round"/>
+          </g>
+          <path d="M241 137 V164 H292" fill="none" stroke="#8b7b9f" stroke-width="1.5"/>
+          <text x="224" y="194" fill="#656172">处理通道</text>
+        </svg>
+      </div>
+      <div>
+        <p class="vvs-stepname"><strong>2 件处理</strong> / 单位时间</p>
+        <svg viewBox="0 0 320 210" role="img" aria-label="每单位时间仅两个任务完成处理并离开">
+          <path d="M10 105 H61 C133 105 149 66 289 66 M61 105 C133 105 149 144 289 144" fill="none" stroke="#a9c8be" stroke-width="2"/>
+          <path d="M279 57 L292 66 L279 75 M279 135 L292 144 L279 153" fill="none" stroke="#367d73" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="169" y="44" width="36" height="44" rx="7" fill="#367d73" stroke="#2d6a61"/>
+          <rect x="169" y="122" width="36" height="44" rx="7" fill="#367d73" stroke="#2d6a61"/>
+          <path d="M177 64 L184 71 L197 57 M177 142 L184 149 L197 135" fill="none" stroke="#f0fff8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="vvs-static" aria-label="静态前后状态">
+      <div class="vvs-staticitem"><p><strong>开始时</strong><br><span>队列 0 件</span></p><div class="vvs-tokenrail"><span>空队列</span></div></div>
+      <div class="vvs-staticitem"><p><strong>3 个单位时间后</strong><br><span>进入 9 − 处理 6 = 留下 3 件</span></p><div class="vvs-tokenrail" role="img" aria-label="队列中三个任务"><i></i><i></i><i></i></div></div>
+    </div>
+    <figcaption>固定速率的离散简化模型：初始队列为空，每单位时间先进入 3 件、再处理 2 件，无任务退出。流线和动效只表示方向，不表示真实速度；停止动画也可直接读出前后状态。</figcaption>
+  </figure>
+  <p class="vvs-conclusion"><strong>队伍变长，是每个单位时间都多留了 1 件。</strong>在这个模型里，只要 3 进、2 出的关系不变，积压就不会自行消失。</p>
+</section>
+
+<section class="vvs-scene" aria-labelledby="vvs-lens-title">
+  <span class="vvs-index">02 / 看清物体</span>
+  <h2 id="vvs-lens-title">光的入口，藏在叶片之间。</h2>
+  <div class="vvs-optics">
+    <figure class="vvs-lensart">
+      <svg viewBox="0 0 480 490" role="img" aria-labelledby="vvs-lens-svg-title vvs-lens-svg-desc">
+        <title id="vvs-lens-svg-title">相机镜头光圈的精密正面插画</title>
+        <desc id="vvs-lens-svg-desc">同心金属镜筒内，八片有渐变明暗的光圈叶片围成中央的透光开口；插画强调结构，不代表特定产品或尺寸。</desc>
+        <defs>
+          <radialGradient id="vvs-lens-shadow"><stop offset="0" stop-color="#65577a" stop-opacity=".26"/><stop offset="1" stop-color="#65577a" stop-opacity="0"/></radialGradient>
+          <linearGradient id="vvs-rim" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" stop-color="#f5f1f7"/><stop offset=".16" stop-color="#93909d"/><stop offset=".37" stop-color="#e7e4ed"/><stop offset=".58" stop-color="#5e5b6e"/><stop offset=".82" stop-color="#b9b5c5"/><stop offset="1" stop-color="#f1edf7"/></linearGradient>
+          <linearGradient id="vvs-barrel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#565363"/><stop offset=".5" stop-color="#282635"/><stop offset="1" stop-color="#777084"/></linearGradient>
+          <radialGradient id="vvs-glass" cx=".38" cy=".3" r=".76"><stop offset="0" stop-color="#d7efea"/><stop offset=".32" stop-color="#b9c9df"/><stop offset=".63" stop-color="#9586b5"/><stop offset="1" stop-color="#454559"/></radialGradient>
+          <linearGradient id="vvs-blade-a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aaa5b9"/><stop offset=".4" stop-color="#706d83"/><stop offset="1" stop-color="#3d3c50"/></linearGradient>
+          <linearGradient id="vvs-blade-b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#89899e"/><stop offset=".65" stop-color="#535368"/><stop offset="1" stop-color="#292d40"/></linearGradient>
+          <radialGradient id="vvs-opening" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".44" stop-color="#edf9e9"/><stop offset=".78" stop-color="#beded4"/><stop offset="1" stop-color="#8cbdba"/></radialGradient>
+        </defs>
+        <ellipse cx="242" cy="439" rx="190" ry="31" fill="url(#vvs-lens-shadow)" stroke="none"/>
+        <circle cx="240" cy="240" r="212" fill="none" stroke="#dcd3e8" stroke-width="1"/>
+        <path d="M240 13 V24 M240 456 V468 M13 240 H24 M456 240 H468" fill="none" stroke="#b6a8c9" stroke-width="1"/>
+        <circle cx="240" cy="240" r="197" fill="url(#vvs-rim)" stroke="#b8b1c2" stroke-width="1.5"/>
+        <circle cx="240" cy="240" r="188" fill="url(#vvs-barrel)" stroke="#f3eff6" stroke-opacity=".65" stroke-width="1"/>
+        <circle cx="240" cy="240" r="179" fill="none" stroke="#c3bccc" stroke-width="5" stroke-dasharray="1 6"/>
+        <circle cx="240" cy="240" r="168" fill="url(#vvs-rim)" stroke="#1d2030" stroke-width="2"/>
+        <circle cx="240" cy="240" r="158" fill="url(#vvs-glass)" stroke="#c8c4d5" stroke-width="1"/>
+        <circle cx="240" cy="240" r="148" fill="#313143" stroke="#242837" stroke-width="2"/>
+        <g fill="none" stroke="#beb6ce" stroke-opacity=".6" stroke-width=".85">
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" fill="url(#vvs-blade-a)"/>
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" transform="rotate(45 240 240)" fill="url(#vvs-blade-b)"/>
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" transform="rotate(90 240 240)" fill="url(#vvs-blade-a)"/>
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" transform="rotate(135 240 240)" fill="url(#vvs-blade-b)"/>
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" transform="rotate(180 240 240)" fill="url(#vvs-blade-a)"/>
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" transform="rotate(225 240 240)" fill="url(#vvs-blade-b)"/>
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" transform="rotate(270 240 240)" fill="url(#vvs-blade-a)"/>
+          <path d="M240 92 A148 148 0 0 1 344.65 135.35 L312 240 L290.91 189.09 Z" transform="rotate(315 240 240)" fill="url(#vvs-blade-b)"/>
+        </g>
+        <g fill="none" data-vv-motion="focus" data-vv-duration="1800">
+          <path d="M240 168 L290.91 189.09 L312 240 L290.91 290.91 L240 312 L189.09 290.91 L168 240 L189.09 189.09 Z" fill="url(#vvs-opening)" stroke="#dddce5" stroke-width="1.2"/>
+          <path d="M199 202 Q227 180 265 195" fill="none" stroke="#ffffff" stroke-opacity=".65" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <path d="M108 117 A181 181 0 0 1 325 79" fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+        <path d="M364 356 A170 170 0 0 1 145 380" fill="none" stroke="#d3bedf" stroke-opacity=".7" stroke-width="1.5"/>
+        <circle cx="240" cy="57" r="3" fill="#e4c893" stroke="#cfb27a" stroke-width=".5"/>
+        <circle cx="57" cy="240" r="3" fill="#c7c0d1" stroke="#343044" stroke-width="1"/>
+        <circle cx="423" cy="240" r="3" fill="#c7c0d1" stroke="#343044" stroke-width="1"/>
+        <circle cx="240" cy="423" r="3" fill="#c7c0d1" stroke="#343044" stroke-width="1"/>
+      </svg>
+      <figcaption>光圈正面 · 手绘 SVG 结构插画<br>金属叶片围住中央开口；渐变与反光用于表现材质。</figcaption>
+    </figure>
+    <div class="vvs-opticstext">
+      <h3>看开口，不只看镜头外圈。</h3>
+      <p>外圈大小可以不变。真正调节光线通路的，是内部叶片围出的开口：叶片收拢，开口变小；叶片退开，开口变大。</p>
+      <div class="vvs-aperturepair">
+        <div>
+          <svg viewBox="0 0 160 160" role="img" aria-label="大光圈示意，中央透光开口较大">
+            <circle cx="80" cy="80" r="72" fill="url(#vvs-rim)" stroke="#aaa3b9"/>
+            <circle cx="80" cy="80" r="65" fill="url(#vvs-barrel)" stroke="#ece6f1"/>
+            <path d="M80 29 L116 44 L131 80 L116 116 L80 131 L44 116 L29 80 L44 44 Z" fill="url(#vvs-opening)" stroke="#c3c0ce"/>
+            <path d="M80 29 L106 20 M116 44 L137 58 M131 80 L140 106 M116 116 L102 137 M80 131 L54 140 M44 116 L23 102 M29 80 L20 54 M44 44 L58 23" fill="none" stroke="#9b94ac" stroke-width="1"/>
+          </svg>
+          <p><strong>大光圈</strong>开口大 · 进光多</p>
+        </div>
+        <div>
+          <svg viewBox="0 0 160 160" role="img" aria-label="小光圈示意，同样大小的外圈内，中央透光开口较小">
+            <circle cx="80" cy="80" r="72" fill="url(#vvs-rim)" stroke="#aaa3b9"/>
+            <circle cx="80" cy="80" r="65" fill="url(#vvs-barrel)" stroke="#ece6f1"/>
+            <path d="M80 56 L97 63 L104 80 L97 97 L80 104 L63 97 L56 80 L63 63 Z" fill="url(#vvs-opening)" stroke="#c3c0ce"/>
+            <path d="M80 56 L106 20 M97 63 L137 58 M104 80 L140 106 M97 97 L102 137 M80 104 L54 140 M63 97 L23 102 M56 80 L20 54 M63 63 L58 23" fill="none" stroke="#9b94ac" stroke-width="1"/>
+          </svg>
+          <p><strong>小光圈</strong>开口小 · 进光少</p>
+        </div>
+      </div>
+      <p class="vvs-conclusion"><strong>其他条件相同，大光圈进光多，小光圈进光少。</strong>改变的是光线通过的开口，不是镜头的外壳。</p>
+      <p class="vvs-small">两种状态为定性示意，不对应特定光圈值、尺寸或进光量倍数；不表示真实叶片运动轨迹。</p>
+    </div>
+  </div>
+</section>
+
+<section class="vvs-scene" aria-labelledby="vvs-data-title">
+  <span class="vvs-index">03 / 读懂变化</span>
+  <div class="vvs-dataheading">
+    <div><h2 id="vvs-data-title">同样 100 件，<br>处理构成不一样。</h2><p class="vvs-dataintro">先固定总量，再看各状态占多少。两根等长的条形，避免把“成功更多”误读成“任务总量更多”。</p></div>
+    <div class="vvs-denominator"><strong>100</strong>件 / 每个状态<br>合成数据</div>
+  </div>
+  <figure class="vvs-chart" aria-labelledby="vvs-data-caption">
+    <div class="vvs-legend" aria-label="状态图例"><span><i class="vvs-key vvs-success" aria-hidden="true"></i>成功 · 绿色</span><span><i class="vvs-key vvs-wait" aria-hidden="true"></i>待处理 · 斜纹</span><span><i class="vvs-key vvs-fail" aria-hidden="true"></i>失败 · 玫瑰色</span></div>
+    <div class="vvs-chartrow">
+      <p class="vvs-rowname">之前</p>
+      <div>
+        <div class="vvs-stackbar" role="img" aria-label="之前共100件：成功60件，占60%；待处理30件，占30%；失败10件，占10%">
+          <span class="vvs-success vvs-bar60"></span><span class="vvs-wait vvs-bar30"></span><span class="vvs-fail vvs-bar10"></span>
+        </div>
+        <div class="vvs-values"><span>成功 <strong>60 件</strong></span><span>待处理 <strong>30 件</strong></span><span>失败 <strong>10 件</strong></span></div>
+      </div>
+    </div>
+    <div class="vvs-chartrow">
+      <p class="vvs-rowname">之后</p>
+      <div>
+        <div class="vvs-stackbar" role="img" aria-label="之后共100件：成功80件，占80%；待处理15件，占15%；失败5件，占5%">
+          <span class="vvs-success vvs-bar80"></span><span class="vvs-wait vvs-bar15"></span><span class="vvs-fail vvs-bar5"></span>
+        </div>
+        <div class="vvs-values"><span>成功 <strong>80 件</strong></span><span>待处理 <strong>15 件</strong></span><span>失败 <strong>5 件</strong></span></div>
+      </div>
+    </div>
+    <div class="vvs-chartaxis" aria-hidden="true"><span>0</span><span>50</span><span>100 件</span></div>
+    <figcaption id="vvs-data-caption">合成数据，非真实业务记录。每条总长均代表 100 件，每 1% 宽度代表 1 件；之前 60 + 30 + 10 = 100，之后 80 + 15 + 5 = 100。状态互斥、覆盖全部任务，顺序保持一致。</figcaption>
+  </figure>
+  <div class="vvs-datatail">
+    <div class="vvs-delta"><strong>+20</strong><span>个百分点<br>成功占比从 60% 到 80%</span></div>
+    <p class="vvs-conclusion"><strong>总量不变，成功多了 20 件。</strong>待处理少了 15 件，失败少了 5 件。这是构成差异，不是总任务量增长。</p>
+  </div>
+  <p class="vvs-small" style="margin-top:24px">读图边界：汇总构成不能说明具体哪些任务发生了状态迁移，也不能证明变化由某个方法导致。“+20 个百分点”不等于“相对增长 20%”。</p>
+</section>
+
+<p class="vvs-end">让图形承担解释，让文字留下结论。此合集展示视觉表达方式，不声称已经验证阅读速度、理解程度或业务效果的提升。</p>

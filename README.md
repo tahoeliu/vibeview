@@ -108,7 +108,8 @@ The agent reads [SKILL.md](SKILL.md), chooses a visual approach, and writes the 
 - **Model-dependent results.** The agent authors the page, so visual quality and factual accuracy depend on the model, source material, and prompt. Review important claims before sharing.
 - **Desktop-first reading.** The included example also adapts to narrower screens; the skill does not promise complete mobile support.
 - **Trusted input only.** The composer checks newly authored fragments. It is not a sanitizer for arbitrary external HTML. The host’s model and network settings determine how source material is handled.
-- **Version 1.5.3.** Ordinary content now gets a centered reading area and responsive side gutters by default, including with `--bare`. Top-level `.vv-full-bleed` sections can have edge-to-edge backgrounds while keeping text inset. Existing fully authored pages can use `--layout custom` to preserve their layout. See [the authoring contract](SKILL.md#reading-boundaries-are-required) for compatibility and custom CSS limits. The runtime still uses only Python’s standard library.
+- **Version 1.6.0-lab.4.** This preview adds subject-led art direction, research-first guidance, a muted default palette, reusable CSS and optional SVG utilities. Choose the visual approach before selecting components; box-and-arrow diagrams are not the default. Optional offline motion supports seamless flow loops, visibility-aware playback and reduced-motion fallback. The Python tools still use only the standard library. See [the authoring contract](SKILL.md#build-directly-on-the-shared-foundation).
+- **Preview scope.** Technical checks cover local offline pages in macOS Chrome. Other browser engines, real mobile devices, actual background transitions and back/forward-cache restoration have not all been verified. This is a preview, not a claim of universal compatibility.
 
 </details>
 
