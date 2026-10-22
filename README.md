@@ -19,7 +19,7 @@ Your AI has the answer. You still have to make sense of it.
 VibeView gives that answer a visual structure: show how a process works, put two options side by side, or connect a conclusion to its evidence. It uses the context and work already in the chat, with the important details still there to read.
 
 ```text
-vv make the explanation above easier to understand
+vv this
 ```
 
 ## See a real example
