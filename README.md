@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="assets/vibeview-mark.svg" alt="VibeView" width="64" height="64" />
-
 # VibeView
 
 ### Make AI answers easier to understand—and more enjoyable to read.

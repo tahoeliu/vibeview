@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="assets/vibeview-mark.svg" alt="VibeView" width="64" height="64" />
-
 # VibeView
 
 ### 让 AI 的答案更易理解，也更愿意读下去。
