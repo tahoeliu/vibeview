@@ -38,6 +38,7 @@ class AuthoredFragment(HTMLParser):
         self.in_style = False
         self.styles = []
         self.warnings = []
+        self.has_loose_text = False
     def handle_starttag(self, tag, attrs):
         self.nodes += 1
         if self.nodes > 20000 or len(self.stack) > 128:
@@ -95,17 +96,21 @@ class AuthoredFragment(HTMLParser):
     def handle_data(self, data):
         if self.in_style:
             self.styles.append(data)
+        elif not self.stack and data.strip():
+            self.has_loose_text = True
     def handle_decl(self, decl):
         raise ValueError('Supply content fragment, not document wrapper')
     def check_visibility(self, value):
         if re.search(r'display\s*:\s*none|visibility\s*:\s*hidden|opacity\s*:\s*0\s*[;}]|content-visibility\s*:\s*hidden', value, re.I):
             self.warnings.append('Possible hidden content; review before delivering')
 
-def compose(fragment, title, theme='violet', kit=True):
+def compose(fragment, title, theme='violet', kit=True, layout='reading'):
     if not isinstance(title, str) or not title.strip():
         raise ValueError('Title required')
     if theme not in ('violet', 'blue', 'sage', 'amber'):
         raise ValueError('Unknown theme')
+    if layout not in ('reading', 'custom'):
+        raise ValueError('Unknown layout; choose reading or custom')
     check = AuthoredFragment()
     check.feed(fragment)
     check.close()
@@ -116,11 +121,18 @@ def compose(fragment, title, theme='violet', kit=True):
         raise ValueError('Unclosed tags or missing local reference')
     if not check.has_h1:
         raise ValueError('Authored content must contain its own h1; shell does not impose a hero')
+    if layout == 'reading' and check.has_loose_text:
+        raise ValueError('Wrap top-level text in an element such as p for the reading layout')
+    if layout == 'custom':
+        check.warnings.append('Custom layout: provide and verify text gutters, line lengths, and narrow-screen behavior')
     if kit:
         base = (Path(__file__).resolve().parent.parent / 'assets/design.css').read_text(encoding='utf-8')
     else:
         base = 'body{margin:0;color:#252535;background:#fafafa;font-family:system-ui,sans-serif}.vv-brandbar{padding:22px 40px;border-bottom:1px solid #ddd}.vv-brandbar a{color:inherit;text-decoration:none;font-size:25px;font-weight:700}.vv-footer{padding:24px 40px;font-size:12px;color:#667}'
-    page = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main">' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">VibeView · Visual explanations</div></footer></body></html>'
+    if layout == 'reading':
+        base += '\n' + (Path(__file__).resolve().parent.parent / 'assets/layout.css').read_text(encoding='utf-8')
+    main_class = ' class="vv-reading-layout"' if layout == 'reading' else ''
+    page = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + html.escape(title) + '</title><style>' + base + '</style></head><body data-theme="' + theme + '" data-vv-layout="' + layout + '"><header class="vv-brandbar"><div class="vv-wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"' + main_class + '>' + fragment + '</main><footer class="vv-footer"><div class="vv-wrap">VibeView · Visual explanations</div></footer></body></html>'
     return page, list(dict.fromkeys(check.warnings))
 
 def main():
@@ -129,7 +141,8 @@ def main():
     parser.add_argument('output', help='New HTML file in an existing directory')
     parser.add_argument('--title', required=True)
     parser.add_argument('--theme', choices=('violet', 'blue', 'sage', 'amber'), default='violet')
-    parser.add_argument('--bare', action='store_true', help='Keep the brand shell without the shared design styles')
+    parser.add_argument('--bare', action='store_true', help='Omit visual primitives; retain reading boundaries unless --layout custom is set')
+    parser.add_argument('--layout', choices=('reading', 'custom'), default='reading', help='Use safe reading boundaries (default), or preserve an authored layout with custom')
     parser.add_argument('--lang', choices=('en', 'zh-CN'), default='en', help='Document language metadata (default: en)')
     args = parser.parse_args()
     start = time.perf_counter()
@@ -141,7 +154,7 @@ def main():
                 raw = f.read(LIMIT + 1)
         if len(raw) > LIMIT:
             raise ValueError('Input exceeds 4 MiB')
-        page, warnings = compose(raw.decode('utf-8-sig'), args.title, args.theme, not args.bare)
+        page, warnings = compose(raw.decode('utf-8-sig'), args.title, args.theme, not args.bare, args.layout)
         if args.lang == 'zh-CN':
             page = page.replace('<html lang="en">', '<html lang="zh-CN">')
         out = write_new(args.output, page, warnings)

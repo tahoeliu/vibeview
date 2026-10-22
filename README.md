@@ -6,7 +6,7 @@
 
 An open-source **Agent Skill** that turns long AI answers into clear visual explanations, right from your conversation.
 
-[**Get started**](#get-started) · [Live demo ↗](https://tahoeliu.github.io/vibeview/) · [Compare skills](#compare-visual-skills) · [简体中文](README.zh-CN.md)
+[**Get started**](#get-started) · [Live demo ↗](https://tahoeliu.github.io/vibeview/) · [Compare skills](#compare-visual-skills) · [Legacy README](README.zh-CN.md)
 
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-7041b5?style=flat-square)](https://agentskills.io/home) [![Python 3](https://img.shields.io/badge/Python-3-3776ab?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![MIT](https://img.shields.io/badge/License-MIT-326f62?style=flat-square)](LICENSE)
 
@@ -77,7 +77,7 @@ From the repository directory, run:
 
 ```bash
 python3 -B scripts/compose.py examples/reading-map.fragment.html preview.html \
-  --title "Retry the request. Reuse the result." --theme violet
+  --title "Retry the request. Reuse the result." --theme violet --layout custom
 ```
 
 Open `preview.html` in a browser. Choose a new output filename for each build: the composer refuses to overwrite files. It assembles an authored HTML fragment; the agent creates the explanation and diagrams.
@@ -108,9 +108,17 @@ The agent reads [SKILL.md](SKILL.md), chooses a visual approach, and writes the 
 - **Model-dependent results.** The agent authors the page, so visual quality and factual accuracy depend on the model, source material, and prompt. Review important claims before sharing.
 - **Desktop-first reading.** The included example also adapts to narrower screens; the skill does not promise complete mobile support.
 - **Trusted input only.** The composer checks newly authored fragments. It is not a sanitizer for arbitrary external HTML. The host’s model and network settings determine how source material is handled.
-- **Version 1.5.2.** The runtime uses Python’s standard library. The release’s recorded regression run covered 100 isolated cases on Python 3.13.12 / macOS; it does not establish cross-platform support.
+- **Version 1.5.3.** Ordinary content now gets a centered reading area and responsive side gutters by default, including with `--bare`. Top-level `.vv-full-bleed` sections can have edge-to-edge backgrounds while keeping text inset. Existing fully authored pages can use `--layout custom` to preserve their layout. See [the authoring contract](SKILL.md#reading-boundaries-are-required) for compatibility and custom CSS limits. The runtime still uses only Python’s standard library.
 
 </details>
+
+## Run the regression tests
+
+```bash
+python3 -B scripts/test_compose.py
+```
+
+The tests cover layout selection, theme and bare-mode combinations, existing examples, input validation, exclusive writes, concurrent publication, cancellation, and injected filesystem failures. They use temporary directories and require no third-party Python packages. Browser geometry checks should additionally cover narrow and wide viewports, full-width backgrounds with inset text, and existing pages in custom mode.
 
 ## Share something worth reading
 

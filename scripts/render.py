@@ -196,7 +196,7 @@ def render(data):
     language = data.get('language', 'en')
     if language not in ('en', 'zh-CN'):
         raise ValueError('language must be en or zh-CN')
-    footer = 'VibeView · Visual explanations' if language == 'en' else 'VibeView · 单页可视化阅读'
+    footer = 'VibeView · Visual explanations'
     page = '<!doctype html>\n<html lang="' + language + '"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'; img-src data:; base-uri \'none\'"><title>VibeView · ' + esc(title) + '</title><style>' + css + '</style></head><body data-theme="' + theme + '"><header><div class="wrap"><a data-vibe-brand href="#main">VibeView.</a></div></header><main id="main"><section class="hero"><div class="wrap"><h1>' + esc(title) + '</h1><div class="lead">' + paragraphs(data.get('subtitle')) + '</div><p class="meta">' + esc(data.get('meta', '')) + '</p></div></section>' + body + '</main><footer><div class="wrap">' + footer + '</div></footer></body></html>'
     checker = FinalCheck()
     checker.feed(page)

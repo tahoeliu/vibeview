@@ -1,0 +1,17 @@
+/* Reading boundaries are infrastructure, not a page template. */
+:root{--vv-gutter:clamp(20px,4vw,40px);--vv-content-width:1240px}
+.vv-reading-layout{display:grid;grid-template-columns:[full-start] minmax(var(--vv-gutter),1fr) [content-start] minmax(0,var(--vv-content-width)) [content-end] minmax(var(--vv-gutter),1fr) [full-end];align-content:start;overflow-wrap:anywhere}
+.vv-reading-layout>*{grid-column:content;min-width:0}
+.vv-reading-layout>style{display:none}
+.vv-reading-layout>.vv-wrap{width:100%;margin-inline:0}
+.vv-reading-layout>.vv-full-bleed{grid-column:full;box-sizing:border-box;padding-inline:max(var(--vv-gutter),calc((100% - var(--vv-content-width))/2))}
+.vv-reading-layout>.vv-full-bleed>.vv-wrap{width:100%;margin-inline:auto}
+.vv-reading-layout :where(p,li,dd){max-inline-size:70ch}
+.vv-reading-layout :where(h1,h2,h3,pre,a){overflow-wrap:anywhere}
+.vv-reading-layout :where(img,svg){max-inline-size:100%;height:auto}
+.vv-reading-layout :where(pre){white-space:pre-wrap}
+.vv-reading-layout :where(.vv-table-scroll){overflow-x:auto;max-inline-size:100%}
+body[data-vv-layout="reading"]>.vv-brandbar,body[data-vv-layout="reading"]>.vv-footer{padding-inline:0}
+body[data-vv-layout="reading"]>.vv-brandbar>.vv-wrap,body[data-vv-layout="reading"]>.vv-footer>.vv-wrap{width:calc(100% - 2*var(--vv-gutter));max-width:var(--vv-content-width);margin-inline:auto}
+@media(max-width:760px){.vv-reading-layout :where(.vv-grid,.vv-split,.vv-route){grid-template-columns:minmax(0,1fr)}.vv-reading-layout :where(.vv-span){grid-column:auto}}
+@media print{.vv-reading-layout{--vv-gutter:8mm;--vv-content-width:100%}.vv-reading-layout>.vv-full-bleed{padding-inline:var(--vv-gutter)}}
